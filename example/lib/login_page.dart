@@ -2,44 +2,32 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:uniform/uniform.dart';
-import 'package:uniform_example/validators/email_input_field_validator.dart';
-import 'package:uniform_example/validators/password_input_field_validator.dart';
+import 'package:uniform_example/login_view_model.dart';
 
-enum FormDemoTags {
-  email,
-  password,
-  rememberMe,
+enum Gender {
+  male('Male'),
+  female('Female'),
+  other('Other');
+
+  const Gender(this.name);
+
+  final String name;
 }
 
-class FormDemoPage extends StatefulWidget {
-  const FormDemoPage({super.key});
+class LoginPage extends StatefulWidget {
+  const LoginPage({super.key});
 
   @override
-  State<FormDemoPage> createState() => _FormDemoPageState();
+  State<LoginPage> createState() => _LoginPageState();
 }
 
-class _FormDemoPageState extends State<FormDemoPage> {
-  late final FormController _controller;
+class _LoginPageState extends State<LoginPage> {
+  late final LoginViewModel viewModel;
 
   @override
   void initState() {
     super.initState();
-    _controller = FormController(
-      validators: {const InputFieldValidator.required()},
-    );
-    _initValidators();
-  }
-
-  Future<void> _initValidators() async {
-    final emailController = await _controller(FormDemoTags.email);
-    emailController
-      ..setValidators({const EmailInputFieldValidator()})
-      ..setValue('sales@acme-software.com');
-
-    final passwordController = await _controller(FormDemoTags.password);
-    passwordController.setValidators(
-      {const PasswordInputFieldValidator()},
-    );
+    viewModel = LoginViewModel();
   }
 
   @override
@@ -49,23 +37,44 @@ class _FormDemoPageState extends State<FormDemoPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: InputForm(
-          controller: _controller,
+          controller: viewModel.loginFormController,
           child: Column(
             children: [
               const TextInputField(
-                tag: FormDemoTags.email,
+                tag: LoginFormTags.email,
                 hintText: 'Email',
               ),
               const SizedBox(height: 16),
               const TextInputField(
-                tag: FormDemoTags.password,
+                tag: LoginFormTags.password,
                 hintText: 'Password',
                 obscureText: true,
                 autoValidate: true,
               ),
               const SizedBox(height: 16),
+              InputFieldBuilder<Gender>(
+                tag: LoginFormTags.gender,
+                builder: (context, controller, _) {
+                  return DropdownButtonFormField(
+                    value: controller.value,
+                    onChanged: controller.onChanged,
+                    decoration: InputDecoration(
+                      errorText: controller.error.message,
+                      hintText: 'Gender',
+                    ),
+                    items: [
+                      for (final gender in Gender.values)
+                        DropdownMenuItem(
+                          value: gender,
+                          child: Text(gender.name),
+                        ),
+                    ],
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
               InputFieldBuilder<bool>(
-                tag: FormDemoTags.rememberMe,
+                tag: LoginFormTags.rememberMe,
                 builder: (context, controller, _) {
                   return CheckboxListTile(
                     value: controller.value ?? false,
@@ -82,9 +91,9 @@ class _FormDemoPageState extends State<FormDemoPage> {
 
                   return FilledButton(
                     onPressed: controller.contains({InputFormState.touched})
-                        ? () => log('Form Valid: ${_controller.validate()}')
+                        ? viewModel.login
                         : null,
-                    child: const Text('Submit'),
+                    child: const Text('Login'),
                   );
                 },
               ),
@@ -93,6 +102,12 @@ class _FormDemoPageState extends State<FormDemoPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    viewModel.dispose();
+    super.dispose();
   }
 }
 

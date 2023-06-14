@@ -6,7 +6,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
     required this.parent,
     this.initialValue,
     this.autoValidate = false,
-  }) {
+  }) : assert(!parent._fields.containsKey(tag), '\nDuplicate field tag: $tag') {
     parent._fields[tag] = this;
 
     _value = initialValue;

@@ -30,12 +30,16 @@ class _InputFieldBuilderState<T extends Object>
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    _controller ??= FieldController(
-      tag: widget.tag,
-      parent: InputForm.controllerOf(context),
-      initialValue: widget.initialValue,
-      autoValidate: widget.autoValidate,
-    );
+    _controller ??= _buildController();
+  }
+
+  @override
+  void didUpdateWidget(InputFieldBuilder<T> oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.tag != widget.tag) {
+      _controller!.parent.remove(oldWidget.tag);
+      _controller = _buildController();
+    }
   }
 
   @override
@@ -44,6 +48,15 @@ class _InputFieldBuilderState<T extends Object>
       listenable: _controller!,
       builder: (context, child) => widget.builder(context, _controller!, child),
       child: widget.child,
+    );
+  }
+
+  FieldController<T> _buildController() {
+    return FieldController(
+      tag: widget.tag,
+      parent: InputForm.controllerOf(context),
+      initialValue: widget.initialValue,
+      autoValidate: widget.autoValidate,
     );
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:uniform_example/form_demo_page.dart';
+import 'package:uniform_example/login_page.dart';
 
 void main() {
   runApp(const UniformExampleApp());
@@ -21,7 +21,7 @@ class UniformExampleApp extends StatelessWidget {
           filled: true,
         ),
       ),
-      home: const FormDemoPage(),
+      home: const LoginPage(),
     );
   }
 }
