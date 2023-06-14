@@ -32,6 +32,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
   }
 
   void setValue(T? value, {bool notify = true}) {
+    parent._setDirty();
     _value = value;
 
     if (_lastErrorValue != _value) {
@@ -46,6 +47,11 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _lastErrorValue = _value;
 
     if (notify) notifyListeners();
+  }
+
+  void onChanged(T? value, {bool notify = true}) {
+    parent._setTouched();
+    setValue(value, notify: notify);
   }
 
   bool validate() {
@@ -72,5 +78,8 @@ class TextFieldController extends FieldController<String> {
     super.initialValue,
   });
 
-  void onChanged(String? value) => super.setValue(value, notify: false);
+  @override
+  void onChanged(String? value, {bool notify = false}) {
+    super.onChanged(value, notify: notify);
+  }
 }

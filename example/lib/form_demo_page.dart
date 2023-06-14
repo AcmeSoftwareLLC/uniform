@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:uniform/uniform.dart';
 import 'package:uniform_example/validators/email_input_field_validator.dart';
@@ -49,43 +51,28 @@ class _FormDemoPageState extends State<FormDemoPage> {
           controller: _controller,
           child: Column(
             children: [
-              TextInputFieldBuilder(
+              const TextInputField(
                 tag: FormDemoTags.email,
-                builder: (context, controller, textEditingController) {
-                  return TextFormField(
-                    controller: textEditingController,
-                    decoration: InputDecoration(
-                      hintText: 'Email',
-                      errorText: controller.error.message,
-                    ),
-                    onChanged: controller.onChanged,
-                  );
-                },
+                hintText: 'Email',
               ),
               const SizedBox(height: 16),
-              InputFieldBuilder<String>(
+              const TextInputField(
                 tag: FormDemoTags.password,
-                builder: (context, controller, _) {
-                  return TextFormField(
-                    initialValue: controller.value,
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      errorText: controller.error.message,
-                    ),
-                    onChanged: controller.setValue,
-                    obscureText: true,
-                  );
-                },
+                hintText: 'Password',
+                obscureText: true,
               ),
               const SizedBox(height: 40),
-              Builder(
-                builder: (context) {
+              ListenableBuilder(
+                listenable: _controller,
+                builder: (context, _) {
                   return FilledButton(
-                    onPressed: () {
-                      final form = InputForm.controllerOf(context);
-
-                      print(form.validate());
-                    },
+                    onPressed:
+                        _controller.states.contains(InputFormState.touched)
+                            ? () {
+                                log('Form Valid: ${_controller.validate()}');
+                                log('Form States: ${_controller.states}');
+                              }
+                            : null,
                     child: const Text('Submit'),
                   );
                 },
@@ -94,6 +81,37 @@ class _FormDemoPageState extends State<FormDemoPage> {
           ),
         ),
       ),
+    );
+  }
+}
+
+class TextInputField extends StatelessWidget {
+  const TextInputField({
+    required this.tag,
+    required this.hintText,
+    this.obscureText = false,
+    super.key,
+  });
+
+  final Object tag;
+  final String hintText;
+  final bool obscureText;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextInputFieldBuilder(
+      tag: tag,
+      builder: (context, controller, textEditingController) {
+        return TextFormField(
+          controller: textEditingController,
+          decoration: InputDecoration(
+            hintText: hintText,
+            errorText: controller.error.message,
+          ),
+          onChanged: controller.onChanged,
+          obscureText: obscureText,
+        );
+      },
     );
   }
 }
