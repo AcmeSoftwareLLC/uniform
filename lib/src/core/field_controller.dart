@@ -38,11 +38,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _value = value;
 
     if (_value != null && autoValidate) validate();
-
-    if (_lastErrorValue != _value) {
-      setError(const InputFieldError.none(), notify: notify);
-    }
-
+    if (_lastErrorValue != _value) setError(const InputFieldError.none());
     if (notify) notifyListeners();
   }
 

@@ -16,6 +16,10 @@ class UniformExampleApp extends StatelessWidget {
         colorSchemeSeed: Colors.green,
         brightness: Brightness.dark,
         useMaterial3: true,
+        inputDecorationTheme: InputDecorationTheme(
+          fillColor: Colors.green.withAlpha(20),
+          filled: true,
+        ),
       ),
       home: const FormDemoPage(),
     );

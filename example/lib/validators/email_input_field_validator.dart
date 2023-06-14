@@ -6,7 +6,7 @@ class EmailInputFieldValidator implements InputFieldValidator {
   @override
   InputFieldError resolve(String value) {
     final emailRegex = RegExp(
-      r'^[a-zA-Z\d.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z\d-]+(?:\.[a-zA-Z\d-]+)*$',
+      r'^[a-zA-Z\d.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z\d-]+(\.[a-zA-Z\d-]{2,})+$',
     );
 
     if (!emailRegex.hasMatch(value)) {

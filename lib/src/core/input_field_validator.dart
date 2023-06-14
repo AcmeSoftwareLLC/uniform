@@ -1,16 +1,24 @@
 part of 'form_controller.dart';
 
 abstract interface class InputFieldValidator {
+  const factory InputFieldValidator.required([
+    String message,
+  ]) = _RequiredInputFieldValidator;
+
   InputFieldError resolve(covariant Object? value);
 }
 
-class RequiredInputFieldValidator implements InputFieldValidator {
-  const RequiredInputFieldValidator();
+class _RequiredInputFieldValidator implements InputFieldValidator {
+  const _RequiredInputFieldValidator([
+    this.message = 'This field is required.',
+  ]);
+
+  final String message;
 
   @override
-  InputFieldError resolve(String? value) {
-    if (value == null || value.isEmpty) {
-      return const InputFieldError('This field is required');
+  InputFieldError resolve(Object? value) {
+    if (value == null || value is String && value.isEmpty) {
+      return InputFieldError(message);
     }
 
     return const InputFieldError.none();

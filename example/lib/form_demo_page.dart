@@ -8,6 +8,7 @@ import 'package:uniform_example/validators/password_input_field_validator.dart';
 enum FormDemoTags {
   email,
   password,
+  rememberMe,
 }
 
 class FormDemoPage extends StatefulWidget {
@@ -24,7 +25,7 @@ class _FormDemoPageState extends State<FormDemoPage> {
   void initState() {
     super.initState();
     _controller = FormController(
-      validators: {const RequiredInputFieldValidator()},
+      validators: {const InputFieldValidator.required()},
     );
     _initValidators();
   }
@@ -61,6 +62,18 @@ class _FormDemoPageState extends State<FormDemoPage> {
                 hintText: 'Password',
                 obscureText: true,
                 autoValidate: true,
+              ),
+              const SizedBox(height: 16),
+              InputFieldBuilder<bool>(
+                tag: FormDemoTags.rememberMe,
+                builder: (context, controller, _) {
+                  return CheckboxListTile(
+                    value: controller.value ?? false,
+                    onChanged: controller.onChanged,
+                    controlAffinity: ListTileControlAffinity.leading,
+                    title: const Text('Remember me'),
+                  );
+                },
               ),
               const SizedBox(height: 40),
               InputActionBuilder(
