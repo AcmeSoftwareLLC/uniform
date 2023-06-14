@@ -19,24 +19,27 @@ class FormController extends ChangeNotifier {
   final Set<InputFormState> _states = {
     InputFormState.pristine,
     InputFormState.untouched,
-    InputFormState.valid,
   };
 
   Iterable<Object> get tags => _fields.keys;
 
   Set<InputFormState> get states => Set.unmodifiable(_states);
 
+  bool contains(Set<InputFormState> states) {
+    return _states.intersection(states).isNotEmpty;
+  }
+
   Future<FieldController<T>> call<T extends Object>(Object tag) async {
     await _initCompleter.future;
     return _field(tag);
   }
 
-  bool validate({Set<Object>? tags}) {
+  bool validate({Set<Object>? tags, bool notify = true}) {
     final fields = tags == null ? _fields.values : tags.map(_field);
 
     var isFormValid = true;
     for (final field in fields) {
-      if (!field.validate()) isFormValid = false;
+      if (!field.validate(notify: notify)) isFormValid = false;
     }
 
     _setValidity(isValid: isFormValid);

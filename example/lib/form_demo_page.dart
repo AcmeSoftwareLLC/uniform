@@ -60,19 +60,17 @@ class _FormDemoPageState extends State<FormDemoPage> {
                 tag: FormDemoTags.password,
                 hintText: 'Password',
                 obscureText: true,
+                autoValidate: true,
               ),
               const SizedBox(height: 40),
-              ListenableBuilder(
-                listenable: _controller,
-                builder: (context, _) {
+              InputActionBuilder(
+                builder: (context, controller, _) {
+                  log('Form States: ${controller.states}');
+
                   return FilledButton(
-                    onPressed:
-                        _controller.states.contains(InputFormState.touched)
-                            ? () {
-                                log('Form Valid: ${_controller.validate()}');
-                                log('Form States: ${_controller.states}');
-                              }
-                            : null,
+                    onPressed: controller.contains({InputFormState.touched})
+                        ? () => log('Form Valid: ${_controller.validate()}')
+                        : null,
                     child: const Text('Submit'),
                   );
                 },
@@ -90,17 +88,20 @@ class TextInputField extends StatelessWidget {
     required this.tag,
     required this.hintText,
     this.obscureText = false,
+    this.autoValidate = false,
     super.key,
   });
 
   final Object tag;
   final String hintText;
   final bool obscureText;
+  final bool autoValidate;
 
   @override
   Widget build(BuildContext context) {
     return TextInputFieldBuilder(
       tag: tag,
+      autoValidate: autoValidate,
       builder: (context, controller, textEditingController) {
         return TextFormField(
           controller: textEditingController,

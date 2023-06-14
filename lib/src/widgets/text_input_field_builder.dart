@@ -6,6 +6,8 @@ class TextInputFieldBuilder extends StatefulWidget {
   const TextInputFieldBuilder({
     required this.tag,
     required this.builder,
+    this.initialValue,
+    this.autoValidate = false,
     super.key,
   });
 
@@ -15,6 +17,8 @@ class TextInputFieldBuilder extends StatefulWidget {
     TextFieldController,
     TextEditingController,
   ) builder;
+  final String? initialValue;
+  final bool autoValidate;
 
   @override
   State<TextInputFieldBuilder> createState() => _TextInputFieldBuilderState();
@@ -38,14 +42,20 @@ class _TextInputFieldBuilderState extends State<TextInputFieldBuilder> {
       _controller = TextFieldController(
         tag: widget.tag,
         parent: InputForm.controllerOf(context),
+        initialValue: widget.initialValue,
+        autoValidate: widget.autoValidate,
       );
       _controller!.addListener(() {
         final text = _controller!.value ?? '';
 
-        _textController.value = _textController.value.copyWith(
-          text: text,
-          selection: TextSelection.collapsed(offset: text.length),
-        );
+        if (_controller!.isIMEInput) {
+          _textController.value = _textController.value.copyWith(
+            text: text,
+            selection: TextSelection.collapsed(offset: text.length),
+          );
+        } else {
+          _textController.value = _textController.value.copyWith(text: text);
+        }
       });
     }
   }

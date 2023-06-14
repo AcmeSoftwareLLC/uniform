@@ -5,6 +5,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
     required this.tag,
     required this.parent,
     this.initialValue,
+    this.autoValidate = false,
   }) {
     parent._fields[tag] = this;
 
@@ -15,6 +16,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
   final Object tag;
   final FormController parent;
   final T? initialValue;
+  final bool autoValidate;
   late Set<InputFieldValidator> _validators;
 
   T? _value;
@@ -35,6 +37,8 @@ class FieldController<T extends Object> extends ChangeNotifier {
     parent._setDirty();
     _value = value;
 
+    if (_value != null && autoValidate) validate();
+
     if (_lastErrorValue != _value) {
       setError(const InputFieldError.none(), notify: notify);
     }
@@ -54,10 +58,10 @@ class FieldController<T extends Object> extends ChangeNotifier {
     setValue(value, notify: notify);
   }
 
-  bool validate() {
+  bool validate({bool notify = true}) {
     for (final validator in _validators) {
       final error = validator.resolve(_value);
-      setError(error);
+      setError(error, notify: notify);
 
       if (error is! _NoInputFieldError) return false;
     }
@@ -76,10 +80,22 @@ class TextFieldController extends FieldController<String> {
     required super.tag,
     required super.parent,
     super.initialValue,
+    super.autoValidate,
   });
+
+  bool _isIMEInput = false;
+
+  bool get isIMEInput => _isIMEInput;
+
+  @override
+  void setValue(String? value, {bool notify = true}) {
+    _isIMEInput = false;
+    super.setValue(value, notify: notify);
+  }
 
   @override
   void onChanged(String? value, {bool notify = false}) {
+    _isIMEInput = true;
     super.onChanged(value, notify: notify);
   }
 }
