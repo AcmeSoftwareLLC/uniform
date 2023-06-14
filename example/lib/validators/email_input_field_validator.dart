@@ -10,9 +10,9 @@ class EmailInputFieldValidator implements InputFieldValidator {
     );
 
     if (!emailRegex.hasMatch(value)) {
-      return const InputFieldError('Please input a valid email.');
+      return InputFieldError('Please input a valid email.');
     }
 
-    return const InputFieldError.none();
+    return InputFieldError.none();
   }
 }

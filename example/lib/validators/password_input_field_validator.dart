@@ -6,9 +6,9 @@ class PasswordInputFieldValidator implements InputFieldValidator {
   @override
   InputFieldError resolve(String value) {
     if (value.length < 8) {
-      return const InputFieldError('Password must be at least 8 characters.');
+      return InputFieldError('Password must be at least 8 characters.');
     }
 
-    return const InputFieldError.none();
+    return InputFieldError.none();
   }
 }

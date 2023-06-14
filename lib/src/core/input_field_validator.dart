@@ -21,6 +21,6 @@ class _RequiredInputFieldValidator implements InputFieldValidator {
       return InputFieldError(message);
     }
 
-    return const InputFieldError.none();
+    return InputFieldError.none();
   }
 }

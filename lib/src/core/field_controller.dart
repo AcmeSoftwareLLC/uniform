@@ -21,7 +21,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
 
   T? _value;
   T? _lastErrorValue;
-  InputFieldError _error = const InputFieldError.none();
+  InputFieldError _error = InputFieldError.none();
 
   T? get value => _value;
 
@@ -38,7 +38,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _value = value;
 
     if (_value != null && autoValidate) validate();
-    if (_lastErrorValue != _value) setError(const InputFieldError.none());
+    if (_lastErrorValue != _value) setError(InputFieldError.none());
     if (notify) notifyListeners();
   }
 
@@ -56,8 +56,9 @@ class FieldController<T extends Object> extends ChangeNotifier {
 
   bool validate({bool notify = true}) {
     for (final validator in _validators) {
-      final error = validator.resolve(_value);
+      final error = validator.resolve(_value).._tag = tag;
       setError(error, notify: notify);
+      parent._setError(error);
 
       if (error is! _NoInputFieldError) return false;
     }

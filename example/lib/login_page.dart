@@ -1,7 +1,8 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:uniform/uniform.dart';
+import 'package:uniform_example/fields/checkbox_input_field.dart';
+import 'package:uniform_example/fields/dropdown_input_field.dart';
+import 'package:uniform_example/fields/text_input_field.dart';
 import 'package:uniform_example/login_view_model.dart';
 
 enum Gender {
@@ -27,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    viewModel = LoginViewModel();
+    viewModel = LoginViewModel()..addListener(_onViewModelUpdate);
   }
 
   @override
@@ -52,43 +53,22 @@ class _LoginPageState extends State<LoginPage> {
                 autoValidate: true,
               ),
               const SizedBox(height: 16),
-              InputFieldBuilder<Gender>(
+              DropdownInputField(
                 tag: LoginFormTags.gender,
-                builder: (context, controller, _) {
-                  return DropdownButtonFormField(
-                    value: controller.value,
-                    onChanged: controller.onChanged,
-                    decoration: InputDecoration(
-                      errorText: controller.error.message,
-                      hintText: 'Gender',
-                    ),
-                    items: [
-                      for (final gender in Gender.values)
-                        DropdownMenuItem(
-                          value: gender,
-                          child: Text(gender.name),
-                        ),
-                    ],
-                  );
-                },
+                hintText: 'Gender',
+                items: [
+                  for (final gender in Gender.values)
+                    DropdownMenuItem(value: gender, child: Text(gender.name)),
+                ],
               ),
               const SizedBox(height: 16),
-              InputFieldBuilder<bool>(
+              const CheckboxInputField(
                 tag: LoginFormTags.rememberMe,
-                builder: (context, controller, _) {
-                  return CheckboxListTile(
-                    value: controller.value ?? false,
-                    onChanged: controller.onChanged,
-                    controlAffinity: ListTileControlAffinity.leading,
-                    title: const Text('Remember me'),
-                  );
-                },
+                label: 'Remember me',
               ),
               const SizedBox(height: 40),
               InputActionBuilder(
                 builder: (context, controller, _) {
-                  log('Form States: ${controller.states}');
-
                   return FilledButton(
                     onPressed: controller.contains({InputFormState.touched})
                         ? viewModel.login
@@ -109,38 +89,48 @@ class _LoginPageState extends State<LoginPage> {
     viewModel.dispose();
     super.dispose();
   }
-}
 
-class TextInputField extends StatelessWidget {
-  const TextInputField({
-    required this.tag,
-    required this.hintText,
-    this.obscureText = false,
-    this.autoValidate = false,
-    super.key,
-  });
+  void _onViewModelUpdate() {
+    if (viewModel.userData.isNotEmpty) {
+      showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (context) {
+          return AlertDialog(
+            title: const Text('Login Success'),
+            content: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                for (final entry in viewModel.userData.entries)
+                  Text('${(entry.key as Enum).name}: ${entry.value}'),
+              ],
+            ),
+            actions: [
+              FilledButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Done'),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
 
-  final Object tag;
-  final String hintText;
-  final bool obscureText;
-  final bool autoValidate;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextInputFieldBuilder(
-      tag: tag,
-      autoValidate: autoValidate,
-      builder: (context, controller, textEditingController) {
-        return TextFormField(
-          controller: textEditingController,
-          decoration: InputDecoration(
-            hintText: hintText,
-            errorText: controller.error.message,
+  void showLoading() {
+    showDialog<void>(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Dialog(
+        child: Padding(
+          padding: EdgeInsets.all(16),
+          child: SizedBox.square(
+            dimension: 24,
+            child: CircularProgressIndicator(),
           ),
-          onChanged: controller.onChanged,
-          obscureText: obscureText,
-        );
-      },
+        ),
+      ),
     );
   }
 }

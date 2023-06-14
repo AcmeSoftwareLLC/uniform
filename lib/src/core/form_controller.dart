@@ -20,10 +20,23 @@ class FormController extends ChangeNotifier {
     InputFormState.pristine,
     InputFormState.untouched,
   };
+  final Map<Object, InputFieldError> _errors = {};
+
+  Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
 
   Iterable<Object> get tags => _fields.keys;
 
   Set<InputFormState> get states => Set.unmodifiable(_states);
+
+  Map<Object, Object?> get value {
+    return Map.fromEntries(
+      _fields.entries.map((e) => MapEntry(e.key, e.value.value)),
+    );
+  }
+
+  void _setError(InputFieldError error) {
+    _errors[error.tag] = error;
+  }
 
   bool contains(Set<InputFormState> states) {
     return _states.intersection(states).isNotEmpty;
@@ -43,6 +56,7 @@ class FormController extends ChangeNotifier {
     }
 
     _setValidity(isValid: isFormValid);
+    if (!isFormValid) notifyListeners();
     return isFormValid;
   }
 

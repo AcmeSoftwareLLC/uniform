@@ -1,13 +1,16 @@
 part of 'form_controller.dart';
 
 class InputFieldError {
-  const InputFieldError(this.message);
+  InputFieldError([this.message]);
 
-  const factory InputFieldError.none() = _NoInputFieldError;
+  factory InputFieldError.none() = _NoInputFieldError;
 
   final String? message;
+
+  Object get tag => _tag;
+
+  // ignore: prefer_final_fields
+  Object _tag = Object();
 }
 
-class _NoInputFieldError extends InputFieldError {
-  const _NoInputFieldError() : super(null);
-}
+class _NoInputFieldError extends InputFieldError {}

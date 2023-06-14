@@ -20,18 +20,13 @@ class LoginViewModel extends ChangeNotifier {
 
   late final FormController loginFormController;
 
-  bool _isLoading = false;
+  Map<Object, Object?> _userData = {};
 
-  bool get isLoading => _isLoading;
+  Map<Object, Object?> get userData => _userData;
 
-  Future<void> login() async {
+  void login() {
     if (loginFormController.validate()) {
-      _isLoading = true;
-      notifyListeners();
-
-      await Future<void>.delayed(const Duration(seconds: 2));
-
-      _isLoading = false;
+      _userData = loginFormController.value;
       notifyListeners();
     }
   }

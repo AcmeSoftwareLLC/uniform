@@ -3,10 +3,16 @@ import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 
 class InputForm extends StatefulWidget {
-  const InputForm({required this.child, this.controller, super.key});
+  const InputForm({
+    required this.child,
+    this.controller,
+    this.onError,
+    super.key,
+  });
 
   final Widget child;
   final FormController? controller;
+  final ValueChanged<Map<Object, InputFieldError>>? onError;
 
   static FormController controllerOf(
     BuildContext context,
@@ -29,6 +35,10 @@ class _InputFormState extends State<InputForm> {
     super.initState();
     _controller = widget.controller ?? FormController();
     SchedulerBinding.instance.addPostFrameCallback(_controller.initialize);
+
+    if (widget.onError != null) {
+      _controller.addListener(() => widget.onError!(_controller.errors));
+    }
   }
 
   @override
