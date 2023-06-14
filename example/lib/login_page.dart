@@ -5,16 +5,6 @@ import 'package:uniform_example/fields/dropdown_input_field.dart';
 import 'package:uniform_example/fields/text_input_field.dart';
 import 'package:uniform_example/login_view_model.dart';
 
-enum Gender {
-  male('Male'),
-  female('Female'),
-  other('Other');
-
-  const Gender(this.name);
-
-  final String name;
-}
-
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
 
@@ -133,4 +123,14 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
+}
+
+enum Gender {
+  male('Male'),
+  female('Female'),
+  other('Other');
+
+  const Gender(this.name);
+
+  final String name;
 }
