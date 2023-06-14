@@ -1,3 +1,4 @@
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 
@@ -27,6 +28,7 @@ class _InputFormState extends State<InputForm> {
   void initState() {
     super.initState();
     _controller = widget.controller ?? FormController();
+    SchedulerBinding.instance.addPostFrameCallback(_controller.initialize);
   }
 
   @override
@@ -35,6 +37,12 @@ class _InputFormState extends State<InputForm> {
       controller: _controller,
       child: widget.child,
     );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 }
 

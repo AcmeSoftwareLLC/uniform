@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 import 'package:uniform/src/widgets/input_form.dart';
 
-class InputField<T extends Object> extends StatefulWidget {
-  const InputField({
+class InputFieldBuilder<T extends Object> extends StatefulWidget {
+  const InputFieldBuilder({
     required this.tag,
     required this.builder,
     this.child,
@@ -15,15 +15,17 @@ class InputField<T extends Object> extends StatefulWidget {
   final Widget? child;
 
   @override
-  State<InputField<T>> createState() => _InputFieldState<T>();
+  State<InputFieldBuilder<T>> createState() => _InputFieldBuilderState<T>();
 }
 
-class _InputFieldState<T extends Object> extends State<InputField<T>> {
+class _InputFieldBuilderState<T extends Object>
+    extends State<InputFieldBuilder<T>> {
   FieldController<T>? _controller;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     _controller ??= FieldController(
       tag: widget.tag,
       parent: InputForm.controllerOf(context),

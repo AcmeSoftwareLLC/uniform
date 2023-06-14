@@ -31,18 +31,21 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _validators = parent._validators.union(validators);
   }
 
-  void setValue(T? value) {
+  void setValue(T? value, {bool notify = true}) {
     _value = value;
-    if (_lastErrorValue != _value) setError(const InputFieldError.none());
 
-    notifyListeners();
+    if (_lastErrorValue != _value) {
+      setError(const InputFieldError.none(), notify: notify);
+    }
+
+    if (notify) notifyListeners();
   }
 
-  void setError(InputFieldError error) {
+  void setError(InputFieldError error, {bool notify = true}) {
     _error = error;
     _lastErrorValue = _value;
 
-    notifyListeners();
+    if (notify) notifyListeners();
   }
 
   bool validate() {
@@ -60,4 +63,14 @@ class FieldController<T extends Object> extends ChangeNotifier {
   String toString() {
     return 'FieldController[$tag]: $value';
   }
+}
+
+class TextFieldController extends FieldController<String> {
+  TextFieldController({
+    required super.tag,
+    required super.parent,
+    super.initialValue,
+  });
+
+  void onChanged(String? value) => super.setValue(value, notify: false);
 }
