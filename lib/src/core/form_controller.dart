@@ -38,17 +38,25 @@ class FormController extends ChangeNotifier {
     _errors[error.tag] = error;
   }
 
+  FieldController<T> call<T extends Object>(Object tag) {
+    assert(
+      _fields.containsKey(tag),
+      'Field "$tag" not bound to FormController with tags: ${tags.join(', ')}.',
+    );
+    return _fields[tag]! as FieldController<T>;
+  }
+
   bool contains(Set<InputFormState> states) {
     return _states.intersection(states).isNotEmpty;
   }
 
-  Future<FieldController<T>> call<T extends Object>(Object tag) async {
+  Future<FieldController<T>> getField<T extends Object>(Object tag) async {
     await _initCompleter.future;
-    return _field(tag);
+    return call(tag);
   }
 
   bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = tags == null ? _fields.values : tags.map(_field);
+    final fields = tags == null ? _fields.values : tags.map(call);
 
     var isFormValid = true;
     for (final field in fields) {
@@ -72,14 +80,6 @@ class FormController extends ChangeNotifier {
 
   @internal
   void initialize(Duration timestamp) => _initCompleter.complete();
-
-  FieldController<T> _field<T extends Object>(Object tag) {
-    assert(
-      _fields.containsKey(tag),
-      'Field "$tag" not bound to FormController with tags: ${tags.join(', ')}.',
-    );
-    return _fields[tag]! as FieldController<T>;
-  }
 
   void _setDirty() {
     if (_states.contains(InputFormState.pristine)) {

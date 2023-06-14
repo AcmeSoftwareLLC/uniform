@@ -28,7 +28,7 @@ class _LoginPageState extends State<LoginPage> {
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: InputForm(
-          controller: viewModel.loginFormController,
+          controller: viewModel.formController,
           child: Column(
             children: [
               const TextInputField(

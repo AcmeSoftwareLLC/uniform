@@ -12,33 +12,33 @@ enum LoginFormTags {
 
 class LoginViewModel extends ChangeNotifier {
   LoginViewModel() {
-    loginFormController = FormController(
+    formController = FormController(
       validators: {const InputFieldValidator.required()},
     );
     _initValidators();
   }
 
-  late final FormController loginFormController;
+  late final FormController formController;
 
   Map<Object, Object?> _userData = {};
 
   Map<Object, Object?> get userData => _userData;
 
   void login() {
-    if (loginFormController.validate()) {
-      _userData = loginFormController.value;
+    if (formController.validate()) {
+      _userData = formController.value;
       notifyListeners();
     }
   }
 
   Future<void> _initValidators() async {
-    final emailController = await loginFormController(LoginFormTags.email);
+    final emailController = await formController.getField(LoginFormTags.email);
     emailController
       ..setValidators({const EmailInputFieldValidator()})
       ..setValue('sales@acme-software.com');
 
     final passwordController =
-        await loginFormController(LoginFormTags.password);
+        await formController.getField(LoginFormTags.password);
     passwordController.setValidators({const PasswordInputFieldValidator()});
   }
 }
