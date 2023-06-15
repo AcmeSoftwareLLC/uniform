@@ -24,10 +24,17 @@ class LoginViewModel extends ChangeNotifier {
 
   Map<Object, Object?> get userData => _userData;
 
-  void login() {
+  Future<void> login() async {
     if (formController.validate()) {
+      formController.setSubmitted(true);
+
+      // Simulates login
+      await Future<void>.delayed(const Duration(seconds: 2));
+
       _userData = formController.values;
       notifyListeners();
+
+      formController.setSubmitted(false);
     }
   }
 

@@ -10,15 +10,19 @@ class UniformExampleApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const inputDecorationTheme = InputDecorationTheme(
+      border: OutlineInputBorder(),
+    );
+
     return MaterialApp(
       title: 'Uniform Demo',
       theme: ThemeData(
         colorSchemeSeed: Colors.green,
         brightness: Brightness.dark,
         useMaterial3: true,
-        inputDecorationTheme: InputDecorationTheme(
-          fillColor: Colors.green.withAlpha(20),
-          filled: true,
+        inputDecorationTheme: inputDecorationTheme,
+        dropdownMenuTheme: const DropdownMenuThemeData(
+          inputDecorationTheme: inputDecorationTheme,
         ),
       ),
       home: const LoginPage(),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:uniform/uniform.dart';
 import 'package:uniform_example/fields/checkbox_input_field.dart';
 import 'package:uniform_example/fields/dropdown_input_field.dart';
+import 'package:uniform_example/fields/form_button.dart';
 import 'package:uniform_example/fields/text_input_field.dart';
 import 'package:uniform_example/login_view_model.dart';
 
@@ -46,10 +47,11 @@ class _LoginPageState extends State<LoginPage> {
               DropdownInputField(
                 tag: LoginFormTags.gender,
                 hintText: 'Gender',
-                items: [
+                menuEntries: [
                   for (final gender in Gender.values)
-                    DropdownMenuItem(value: gender, child: Text(gender.name)),
+                    DropdownMenuEntry(value: gender, label: gender.name),
                 ],
+                width: MediaQuery.sizeOf(context).width - 32,
               ),
               const SizedBox(height: 16),
               const CheckboxInputField(
@@ -57,15 +59,9 @@ class _LoginPageState extends State<LoginPage> {
                 label: 'Remember me',
               ),
               const SizedBox(height: 40),
-              InputActionBuilder(
-                builder: (context, controller, _) {
-                  return FilledButton(
-                    onPressed: controller.contains({InputFormState.touched})
-                        ? viewModel.login
-                        : null,
-                    child: const Text('Login'),
-                  );
-                },
+              FormButton(
+                onPressed: viewModel.login,
+                child: const Text('Login'),
               ),
             ],
           ),
