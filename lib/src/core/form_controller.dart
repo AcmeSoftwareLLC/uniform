@@ -77,7 +77,9 @@ class FormController extends ChangeNotifier {
   void reset() {
     _fields.clear();
     _initCompleter = Completer();
-    _states.clear();
+    _states
+      ..clear()
+      ..addAll({InputFormState.pristine, InputFormState.untouched});
     _errors.clear();
 
     for (final field in _fields.values) {

@@ -51,7 +51,7 @@ class _InputFormState extends State<InputForm> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    widget.controller == null ? _controller.dispose() : _controller.reset();
     super.dispose();
   }
 }
