@@ -1,5 +1,5 @@
 # Changelog
-## 1.0.0+1
+## 1.0.1
 **Jun 15, 2023**
 - Adds dart docs.
 - Fixes read me contents.
