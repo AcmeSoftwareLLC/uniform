@@ -1,5 +1,5 @@
 name: uniform_example
-description: A new Flutter project.
+description: An example app to demonstrate usage of uniForm.
 publish_to: none
 version: 1.0.0+1
 
@@ -16,7 +16,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   very_good_analysis: ^5.0.0+1
-
 
 flutter:
   uses-material-design: true
