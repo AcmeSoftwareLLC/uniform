@@ -1,6 +1,6 @@
 <h1 align="center">
 <a href="https://github.com/AcmeSoftwareLLC/uniform">
-<img src="https://github.com/AcmeSoftwareLLC/uniform/blob/main/images/uniform.png" width="350">
+<img src="https://raw.githubusercontent.com/AcmeSoftwareLLC/uniform/main/images/uniform.png" width="350">
 </a>
 </h1>
 
