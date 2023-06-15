@@ -1,5 +1,24 @@
+<h1 align="center">
+<a href="https://github.com/AcmeSoftwareLLC/uniform">
+<img src="https://github.com/AcmeSoftwareLLC/uniform/blob/main/images/uniform.png" width="350">
+</a>
+</h1>
+
+<p align="center">
+<a href="https://pub.dev/packages/uniform"><img src="https://img.shields.io/pub/v/uniform?label=pub.dev&labelColor=333940&logo=dart"></a>
+<a href="https://github.com/AcmeSoftwareLLC/uniform/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-BSD--3-informational" alt="BSD-3 License"></a>
+<a href="https://acmesoftware.com"><img src="https://img.shields.io/website?url=https%3A%2F%2Facmesoftware.com" alt="Website"></a>
+<a href="https://www.linkedin.com/company/acmesoftware"><img src="https://img.shields.io/badge/Connect--000?style=social&logo=linkedin" alt="Connect with Acme Software on Linkedin"></a>
+<a href="https://twitter.com/software_acme"><img alt="Twitter Follow" src="https://img.shields.io/twitter/follow/software_acme?label=Acme%20Software%20LLC&style=social"></a>
+<a href="https://www.facebook.com/profile.php?id=100088946151671"><img alt="Facebook" src="https://img.shields.io/badge/Acme%20Software%20LLC--000?style=social&logo=facebook"></a>
+<a href="https://www.instagram.com/acme.software/"><img alt="Instagram" src="https://img.shields.io/badge/Acme%20Software%20LLC--000?style=social&logo=instagram"></a>
+</p>
+
+<p align="center">
 A form library for Flutter that handles form validation and state management gracefully, with unified form representation.
+<br>
 Uniform handles the repetitive and annoying stuff—keeping track of values/errors/visited fields, orchestrating validation, and handling submission.
+</p>
 
 ## Features
 
