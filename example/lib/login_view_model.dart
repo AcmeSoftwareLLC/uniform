@@ -26,19 +26,18 @@ class LoginViewModel extends ChangeNotifier {
 
   void login() {
     if (formController.validate()) {
-      _userData = formController.value;
+      _userData = formController.values;
       notifyListeners();
     }
   }
 
   Future<void> _initValidators() async {
-    final emailController = await formController.getField(LoginFormTags.email);
+    final emailController = await formController(LoginFormTags.email);
     emailController
       ..setValidators({const EmailInputFieldValidator()})
       ..setValue('sales@acme-software.com');
 
-    final passwordController =
-        await formController.getField(LoginFormTags.password);
+    final passwordController = await formController(LoginFormTags.password);
     passwordController.setValidators({const PasswordInputFieldValidator()});
   }
 }

@@ -15,7 +15,7 @@ class FormController extends ChangeNotifier {
 
   final Map<Object, FieldController> _fields = {};
   final Set<InputFieldValidator> _validators;
-  final Completer<void> _initCompleter = Completer();
+  Completer<void> _initCompleter = Completer();
   final Set<InputFormState> _states = {
     InputFormState.pristine,
     InputFormState.untouched,
@@ -28,7 +28,7 @@ class FormController extends ChangeNotifier {
 
   Set<InputFormState> get states => Set.unmodifiable(_states);
 
-  Map<Object, Object?> get value {
+  Map<Object, Object?> get values {
     return Map.fromEntries(
       _fields.entries.map((e) => MapEntry(e.key, e.value.value)),
     );
@@ -38,7 +38,16 @@ class FormController extends ChangeNotifier {
     _errors[error.tag] = error;
   }
 
-  FieldController<T> call<T extends Object>(Object tag) {
+  Future<FieldController<T>> call<T extends Object>(Object tag) async {
+    await _initCompleter.future;
+    return getField(tag);
+  }
+
+  bool contains(Set<InputFormState> states) {
+    return _states.intersection(states).isNotEmpty;
+  }
+
+  FieldController<T> getField<T extends Object>(Object tag) {
     assert(
       _fields.containsKey(tag),
       'Field "$tag" not bound to FormController with tags: ${tags.join(', ')}.',
@@ -46,17 +55,12 @@ class FormController extends ChangeNotifier {
     return _fields[tag]! as FieldController<T>;
   }
 
-  bool contains(Set<InputFormState> states) {
-    return _states.intersection(states).isNotEmpty;
-  }
-
-  Future<FieldController<T>> getField<T extends Object>(Object tag) async {
-    await _initCompleter.future;
-    return call(tag);
+  T? getValue<T extends Object>(Object tag) {
+    return getField(tag).value as T?;
   }
 
   bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = tags == null ? _fields.values : tags.map(call);
+    final fields = tags == null ? _fields.values : tags.map(getField);
 
     var isFormValid = true;
     for (final field in fields) {
@@ -70,16 +74,27 @@ class FormController extends ChangeNotifier {
 
   void remove(Object tag) => _fields.remove(tag);
 
-  @override
-  void dispose() {
+  void reset() {
+    _fields.clear();
+    _initCompleter = Completer();
+    _states.clear();
+    _errors.clear();
+
     for (final field in _fields.values) {
       field.dispose();
     }
+  }
+
+  @override
+  void dispose() {
+    reset();
     super.dispose();
   }
 
   @internal
-  void initialize(Duration timestamp) => _initCompleter.complete();
+  void initialize(Duration timestamp) {
+    if (!_initCompleter.isCompleted) _initCompleter.complete();
+  }
 
   void _setDirty() {
     if (_states.contains(InputFormState.pristine)) {
