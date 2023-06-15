@@ -20,6 +20,9 @@ class FieldController<T extends Object> extends ChangeNotifier {
   }) : assert(!parent._fields.containsKey(tag), '\nDuplicate field tag: $tag') {
     parent._fields[tag] = this;
 
+    final completer = parent._fieldCompleter[tag];
+    if (completer != null && !completer.isCompleted) completer.complete();
+
     _value = initialValue;
     _validators = parent._validators;
   }

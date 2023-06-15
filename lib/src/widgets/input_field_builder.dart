@@ -28,20 +28,19 @@ class InputFieldBuilder<T extends Object> extends StatefulWidget {
 
 class _InputFieldBuilderState<T extends Object>
     extends State<InputFieldBuilder<T>> {
-  FieldController<T>? _controller;
+  late FieldController<T> _controller;
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    _controller ??= _buildController();
+  void initState() {
+    super.initState();
+    _controller = _buildController();
   }
 
   @override
   void didUpdateWidget(InputFieldBuilder<T> oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.tag != widget.tag) {
-      _controller!.parent.remove(oldWidget.tag);
+      _controller.parent.remove(oldWidget.tag);
       _controller = _buildController();
     }
   }
@@ -49,10 +48,16 @@ class _InputFieldBuilderState<T extends Object>
   @override
   Widget build(BuildContext context) {
     return ListenableBuilder(
-      listenable: _controller!,
-      builder: (context, child) => widget.builder(context, _controller!, child),
+      listenable: _controller,
+      builder: (context, child) => widget.builder(context, _controller, child),
       child: widget.child,
     );
+  }
+
+  @override
+  void deactivate() {
+    InputForm.controllerOf(context).remove(widget.tag);
+    super.deactivate();
   }
 
   FieldController<T> _buildController() {

@@ -5,7 +5,6 @@
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
-import 'package:meta/meta.dart';
 import 'package:uniform/src/core/input_form_state.dart';
 
 part 'field_controller.dart';
@@ -21,12 +20,12 @@ class FormController extends ChangeNotifier {
 
   final Map<Object, FieldController> _fields = {};
   final Set<InputFieldValidator> _validators;
-  Completer<void> _initCompleter = Completer();
   final Set<InputFormState> _states = {
     InputFormState.pristine,
     InputFormState.untouched,
   };
   final Map<Object, InputFieldError> _errors = {};
+  final Map<Object, Completer<void>> _fieldCompleter = {};
 
   /// The current [errors] of this form.
   Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
@@ -55,7 +54,9 @@ class FormController extends ChangeNotifier {
   ///
   /// Waits for the form to be initialized if it hasn't been initialized yet.
   Future<FieldController<T>> call<T extends Object>(Object tag) async {
-    await _initCompleter.future;
+    if (!_fields.containsKey(tag)) {
+      await _fieldCompleter.putIfAbsent(tag, Completer.new).future;
+    }
     return getField(tag);
   }
 
@@ -103,7 +104,6 @@ class FormController extends ChangeNotifier {
   /// Resets the form to initial state.
   void reset() {
     _fields.clear();
-    _initCompleter = Completer();
     _states
       ..clear()
       ..addAll({InputFormState.pristine, InputFormState.untouched});
@@ -118,12 +118,6 @@ class FormController extends ChangeNotifier {
   void dispose() {
     reset();
     super.dispose();
-  }
-
-  /// Completes after all the descendant fields has been attach to the form.
-  @internal
-  void initialize(Duration timestamp) {
-    if (!_initCompleter.isCompleted) _initCompleter.complete();
   }
 
   /// Sets the value for [isSubmitted] of the form and each field.

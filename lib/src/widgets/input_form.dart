@@ -2,7 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 
@@ -21,10 +20,9 @@ class InputForm extends StatefulWidget {
   static FormController controllerOf(
     BuildContext context,
   ) {
-    final result =
-        context.dependOnInheritedWidgetOfExactType<_InputFormScope>();
-    assert(result != null, 'No InputForm found in context');
-    return result!.controller;
+    final scope = context.getInheritedWidgetOfExactType<_InputFormScope>();
+    assert(scope != null, 'No InputForm found in context');
+    return scope!.controller;
   }
 
   @override
@@ -38,7 +36,6 @@ class _InputFormState extends State<InputForm> {
   void initState() {
     super.initState();
     _controller = widget.controller ?? FormController();
-    SchedulerBinding.instance.addPostFrameCallback(_controller.initialize);
 
     if (widget.onError != null) {
       _controller.addListener(() => widget.onError!(_controller.errors));
