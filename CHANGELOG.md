@@ -1,4 +1,8 @@
 # Changelog
+## 1.0.3
+**Jun 15, 2023**
+- Fixes pub.dev analyzing issue due to Dart constraint.
+
 ## 1.0.2
 **Jun 15, 2023**
 - Improves field initialization logic.
