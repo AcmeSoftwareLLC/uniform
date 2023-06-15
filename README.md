@@ -1,39 +1,71 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
-
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
-
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
-
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
+A form library for Flutter that handles form validation and state management gracefully, with unified form representation.
+Uniform handles the repetitive and annoying stuff—keeping track of values/errors/visited fields, orchestrating validation, and handling submission.
 
 ## Features
 
-TODO: List what your package can do. Maybe include images, gifs, or videos.
+- Unified form representation using controllers.
+- Easy and customizable form validation API.
+- Built-in support for form submission and state management.
+- Builders for quickly creating form fields.
+- Compatible with any state management solution or vanilla Flutter States.
+- Supports for global and local validators.
 
 ## Getting started
 
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
+See the [Installing](https://pub.dev/packages/uniform/install) section.
+No extra configurations needed.
 
 ## Usage
 
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
+Note: Detailed Usage documentation is coming soon.
+For now, please refer to the [example](https://github.com/AcmeSoftwareLLC/uniform/tree/main/example) for more details.
 
 ```dart
-const like = 'sample';
+InputForm(
+  child: Column(
+    children: [
+      TextInputFieldBuilder(
+        tag: 'email',
+        builder: (_, controller, textController) {
+          return TextFormField(
+            controller: textController,
+            decoration: InputDecoration(
+              hintText: 'Email Address',
+              errorText: controller.error.message,
+            ),
+            enabled: !controller.isSubmitted,
+            onChanged: controller.onChanged,
+          );
+        },
+      ),
+      const SizedBox(height: 16),
+      InputFieldBuilder<bool>(
+        tag: 'remember_me',
+        initialValue: false,
+        builder: (context, controller, _) {
+          return CheckboxListTile(
+            title: const Text('Remember Me'),
+            value: controller.value,
+            controlAffinity: ListTileControlAffinity.leading,
+            enabled: !controller.isSubmitted,
+            onChanged: controller.onChanged,
+          );
+        },
+      ),
+      const SizedBox(height: 40),
+      FilledButton(
+        onPressed: () {
+          if(InputForm.controllerOf(context).validate()){
+            print('Form Submitted!');
+          }
+        },
+        child: const Text('Submit'),
+      ),
+    ],
+  ),
+),
 ```
 
-## Additional information
+## Recommendation
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+The package works best in combination with [clean_framework](https://pub.dev/packages/clean_framework).
