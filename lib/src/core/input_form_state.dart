@@ -16,4 +16,7 @@ enum InputFormState {
 
   /// The field content is valid.
   valid,
+
+  /// The field has been submitted.
+  submitted,
 }

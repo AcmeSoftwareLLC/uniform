@@ -21,6 +21,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
 
   T? _value;
   T? _lastErrorValue;
+  bool _isSubmitted = false;
   InputFieldError _error = InputFieldError.none();
 
   T? get value => _value;
@@ -28,6 +29,8 @@ class FieldController<T extends Object> extends ChangeNotifier {
   InputFieldError get error => _error;
 
   bool get isDirty => _value != initialValue;
+
+  bool get isSubmitted => _isSubmitted;
 
   void setValidators(Set<InputFieldValidator> validators) {
     _validators = parent._validators.union(validators);
@@ -47,6 +50,12 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _lastErrorValue = _value;
 
     if (notify) notifyListeners();
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  void setSubmitted(bool value) {
+    _isSubmitted = value;
+    notifyListeners();
   }
 
   void onChanged(T? value, {bool notify = true}) {

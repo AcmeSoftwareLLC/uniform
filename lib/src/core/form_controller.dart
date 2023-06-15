@@ -34,6 +34,8 @@ class FormController extends ChangeNotifier {
     );
   }
 
+  bool get isSubmitted => states.contains(InputFormState.submitted);
+
   void _setError(InputFieldError error) {
     _errors[error.tag] = error;
   }
@@ -96,6 +98,21 @@ class FormController extends ChangeNotifier {
   @internal
   void initialize(Duration timestamp) {
     if (!_initCompleter.isCompleted) _initCompleter.complete();
+  }
+
+  // ignore: avoid_positional_boolean_parameters
+  void setSubmitted(bool isSubmitted) {
+    if (isSubmitted) {
+      _states.add(InputFormState.submitted);
+    } else {
+      _states.remove(InputFormState.submitted);
+    }
+
+    for (final field in _fields.values) {
+      field.setSubmitted(isSubmitted);
+    }
+
+    notifyListeners();
   }
 
   void _setDirty() {
