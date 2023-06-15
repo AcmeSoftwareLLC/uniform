@@ -4,13 +4,18 @@
 
 part of 'form_controller.dart';
 
+/// The error of a field.
 class InputFieldError {
+  /// Creates an instance of [InputFieldError].
   InputFieldError([this.message]);
 
+  /// Creates an instance of [InputFieldError] with no error.
   factory InputFieldError.none() = _NoInputFieldError;
 
+  /// The error message.
   final String? message;
 
+  /// The tag of the field that this error is bound to.
   Object get tag => _tag;
 
   // ignore: prefer_final_fields

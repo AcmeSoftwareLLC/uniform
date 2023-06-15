@@ -4,7 +4,14 @@
 
 part of 'form_controller.dart';
 
+/// A controller for a single field in a [FormController].
+///
+/// See also:
+///
+///  * [TextFieldController], which is similar to [FieldController]
+///  but can be used to handle text input more gracefully.
 class FieldController<T extends Object> extends ChangeNotifier {
+  /// Creates an instance of [FieldController].
   FieldController({
     required this.tag,
     required this.parent,
@@ -17,10 +24,20 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _validators = parent._validators;
   }
 
+  /// The tag of this field.
+  ///
+  /// This must be unique within the parent [FormController].
   final Object tag;
+
+  /// The parent [FormController] of this field.
   final FormController parent;
+
+  /// The initial value of this field.
   final T? initialValue;
+
+  /// Whether this field should be automatically validated.
   final bool autoValidate;
+
   late Set<InputFieldValidator> _validators;
 
   T? _value;
@@ -30,16 +47,26 @@ class FieldController<T extends Object> extends ChangeNotifier {
 
   T? get value => _value;
 
+  /// The current error of this field.
   InputFieldError get error => _error;
 
+  /// Returns true if the field has been modified.
   bool get isDirty => _value != initialValue;
 
+  /// Returns true if the field has been submitted with [setSubmitted].
   bool get isSubmitted => _isSubmitted;
 
+  /// Sets the [validators] for the field.
   void setValidators(Set<InputFieldValidator> validators) {
     _validators = parent._validators.union(validators);
   }
 
+  /// Sets the [value] of the field.
+  ///
+  /// This should be used while programmatically setting the value of the field.
+  /// If [notify] is true, this will notify listeners.
+  ///
+  /// For setting the value using field components, use [onChanged].
   void setValue(T? value, {bool notify = true}) {
     parent._setDirty();
     _value = value;
@@ -49,6 +76,9 @@ class FieldController<T extends Object> extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 
+  /// Sets the [error] of the field.
+  ///
+  /// If [notify] is true, this will notify listeners.
   void setError(InputFieldError error, {bool notify = true}) {
     _error = error;
     _lastErrorValue = _value;
@@ -56,17 +86,27 @@ class FieldController<T extends Object> extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 
+  /// Sets the [value] for [isSubmitted] of the field.
   // ignore: avoid_positional_boolean_parameters
   void setSubmitted(bool value) {
     _isSubmitted = value;
     notifyListeners();
   }
 
+  /// Sets the [value] of the field.
+  ///
+  /// This should be used while changing the value using field components.
+  /// If [notify] is true, this will notify listeners.
+  ///
+  /// For setting the value programmatically, use [setValue].
   void onChanged(T? value, {bool notify = true}) {
     parent._setTouched();
     setValue(value, notify: notify);
   }
 
+  /// Validates the field.
+  ///
+  /// If [notify] is true, this will notify listeners.
   bool validate({bool notify = true}) {
     for (final validator in _validators) {
       final error = validator.resolve(_value).._tag = tag;
@@ -80,11 +120,14 @@ class FieldController<T extends Object> extends ChangeNotifier {
   }
 
   @override
-  String toString() {
-    return 'FieldController[$tag]: $value';
-  }
+  String toString() => 'FieldController[$tag]: $value';
 }
 
+/// A controller for a single [String] field in a [FormController].
+///
+/// See also:
+///
+///  * [FieldController], which is generic controller that support any type.
 class TextFieldController extends FieldController<String> {
   TextFieldController({
     required super.tag,
@@ -95,6 +138,7 @@ class TextFieldController extends FieldController<String> {
 
   bool _isIMEInput = false;
 
+  /// Returns true if the field has been modified by an Input Method.
   bool get isIMEInput => _isIMEInput;
 
   @override

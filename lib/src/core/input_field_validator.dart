@@ -4,11 +4,14 @@
 
 part of 'form_controller.dart';
 
+/// The validator of a field.
 abstract interface class InputFieldValidator {
+  /// Creates a validator that validates if the field has data.
   const factory InputFieldValidator.required([
     String message,
   ]) = _RequiredInputFieldValidator;
 
+  /// Resolves the error of the field.
   InputFieldError resolve(covariant Object? value);
 }
 
