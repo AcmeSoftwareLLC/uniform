@@ -15,10 +15,12 @@
 </p>
 
 <p align="center">
-A form library for Flutter that handles form validation and state management gracefully, with unified form representation.
+A form library for Flutter that handles form validation and state management gracefully,
 <br>
-Uniform handles the repetitive and annoying stuff—keeping track of values/errors/visited fields, orchestrating validation, and handling submission.
+with unified form representation.
 </p>
+
+Uniform handles the repetitive and annoying stuff—keeping track of values/errors/visited fields, orchestrating validation, and handling submission.
 
 ## Features
 
