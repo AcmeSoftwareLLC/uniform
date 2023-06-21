@@ -43,7 +43,18 @@ Note: Detailed Usage documentation is coming soon.
 For now, please refer to the [example](https://github.com/AcmeSoftwareLLC/uniform/tree/main/example) for more details.
 
 ```dart
+final formController = FormController(
+  validators: {const InputFieldValidator.required()},
+);
+
+TextFieldController.create(formController, tag: 'email')
+  ..setValidators({const EmailInputFieldValidator()});
+
+FieldController<bool>.create(formController, tag: 'remember_me', autoValidate: true)
+  ..setValidators({const PasswordInputFieldValidator()});
+
 InputForm(
+  controller: formController,
   child: Column(
     children: [
       TextInputFieldBuilder(
@@ -77,7 +88,7 @@ InputForm(
       const SizedBox(height: 40),
       FilledButton(
         onPressed: () {
-          if(InputForm.controllerOf(context).validate()){
+          if(formController.validate()){
             print('Form Submitted!');
           }
         },
