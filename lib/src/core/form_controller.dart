@@ -128,6 +128,18 @@ class FormController extends ChangeNotifier {
     notifyListeners();
   }
 
+  /// Sets the initial values for the form.
+  ///
+  /// If [notify] is true, each field will be notified with the initial value.
+  void setInitialValues(
+    Map<Object, Object?> initialValues, {
+    bool notify = true,
+  }) {
+    for (final entry in initialValues.entries) {
+      getField(entry.key).setInitialValue(entry.value, notify: notify);
+    }
+  }
+
   void _setDirty() {
     if (_states.contains(InputFormState.pristine)) {
       _states

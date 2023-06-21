@@ -24,9 +24,7 @@ class LoginViewModel extends ChangeNotifier {
     _emailField = TextFieldController.create(
       formController,
       tag: LoginFormTags.email,
-    )
-      ..setValidators({const EmailInputFieldValidator()})
-      ..setInitialValue('sales@acme-software.com');
+    )..setValidators({const EmailInputFieldValidator()});
 
     _passwordField = TextFieldController.create(
       formController,
@@ -44,6 +42,13 @@ class LoginViewModel extends ChangeNotifier {
     _genderField = FieldController<Gender>.create(
       formController,
       tag: LoginFormTags.gender,
+    );
+
+    formController.setInitialValues(
+      {
+        LoginFormTags.email: 'sales@acme-software.com',
+        LoginFormTags.gender: Gender.female,
+      },
     );
   }
 
