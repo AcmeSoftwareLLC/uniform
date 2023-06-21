@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:uniform/src/core/input_form_state.dart';
 
@@ -25,13 +23,16 @@ class FormController extends ChangeNotifier {
     InputFormState.untouched,
   };
   final Map<Object, InputFieldError> _errors = {};
-  final Map<Object, Completer<void>> _fieldCompleter = {};
+  final Set<Object> _activeTags = {};
 
   /// The current [errors] of this form.
   Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
 
   /// All the field [tags] bound to this form.
-  Iterable<Object> get tags => _fields.keys;
+  Set<Object> get tags => Set.unmodifiable(_fields.keys);
+
+  /// All the field [tags] active in the form.
+  Set<Object> get activeTags => Set.unmodifiable(_activeTags);
 
   /// The current [states] of this form.
   Set<InputFormState> get states => Set.unmodifiable(_states);
@@ -46,17 +47,8 @@ class FormController extends ChangeNotifier {
   /// Returns true if the form has been submitted.
   bool get isSubmitted => states.contains(InputFormState.submitted);
 
-  void _setError(InputFieldError error) {
-    _errors[error.tag] = error;
-  }
-
   /// Gets the [FieldController] bound with the [tag].
-  ///
-  /// Waits for the form to be initialized if it hasn't been initialized yet.
-  Future<FieldController<T>> call<T extends Object>(Object tag) async {
-    if (!_fields.containsKey(tag)) {
-      await _fieldCompleter.putIfAbsent(tag, Completer.new).future;
-    }
+  FieldController<T> call<T extends Object>(Object tag) {
     return getField(tag);
   }
 
@@ -86,7 +78,7 @@ class FormController extends ChangeNotifier {
   /// If [notify] is true,
   /// the form will notify its listeners if the form is invalid.
   bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = tags == null ? _fields.values : tags.map(getField);
+    final fields = (tags ?? _activeTags).map(getField);
 
     var isFormValid = true;
     for (final field in fields) {
@@ -98,25 +90,30 @@ class FormController extends ChangeNotifier {
     return isFormValid;
   }
 
-  /// Removes the field bound with the [tag].
-  void remove(Object tag) => _fields.remove(tag);
+  /// Sets the field bound with the [tag] as active.
+  void activate(Object tag) => _activeTags.add(tag);
+
+  /// Sets the field bound with the [tag] as inactive.
+  void deactivate(Object tag) => _activeTags.remove(tag);
 
   /// Resets the form to initial state.
   void reset() {
-    _fields.clear();
+    for (final field in _fields.values) {
+      field.reset();
+    }
+
     _states
       ..clear()
       ..addAll({InputFormState.pristine, InputFormState.untouched});
     _errors.clear();
-
-    for (final field in _fields.values) {
-      field.dispose();
-    }
   }
 
   @override
   void dispose() {
-    reset();
+    for (final field in _fields.values) {
+      field.dispose();
+    }
+    _fields.clear();
     super.dispose();
   }
 
@@ -134,6 +131,18 @@ class FormController extends ChangeNotifier {
     }
 
     notifyListeners();
+  }
+
+  /// Sets the initial values for the form.
+  ///
+  /// If [notify] is true, each field will be notified with the initial value.
+  void setInitialValues(
+    Map<Object, Object?> initialValues, {
+    bool notify = true,
+  }) {
+    for (final entry in initialValues.entries) {
+      getField(entry.key).setInitialValue(entry.value, notify: notify);
+    }
   }
 
   void _setDirty() {
@@ -166,5 +175,9 @@ class FormController extends ChangeNotifier {
         ..add(InputFormState.invalid);
       notifyListeners();
     }
+  }
+
+  void _setError(InputFieldError error) {
+    _errors[error.tag] = error;
   }
 }

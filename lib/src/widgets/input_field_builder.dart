@@ -11,16 +11,12 @@ class InputFieldBuilder<T extends Object> extends StatefulWidget {
     required this.tag,
     required this.builder,
     this.child,
-    this.initialValue,
-    this.autoValidate = false,
     super.key,
   });
 
   final Object tag;
   final Widget Function(BuildContext, FieldController<T>, Widget?) builder;
   final Widget? child;
-  final T? initialValue;
-  final bool autoValidate;
 
   @override
   State<InputFieldBuilder<T>> createState() => _InputFieldBuilderState<T>();
@@ -28,44 +24,28 @@ class InputFieldBuilder<T extends Object> extends StatefulWidget {
 
 class _InputFieldBuilderState<T extends Object>
     extends State<InputFieldBuilder<T>> {
-  late FieldController<T> _controller;
+  late final FormController _form;
 
   @override
   void initState() {
     super.initState();
-    _controller = _buildController();
-  }
-
-  @override
-  void didUpdateWidget(InputFieldBuilder<T> oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (oldWidget.tag != widget.tag) {
-      _controller.parent.remove(oldWidget.tag);
-      _controller = _buildController();
-    }
+    _form = InputForm.controllerOf(context)..activate(widget.tag);
   }
 
   @override
   Widget build(BuildContext context) {
+    final controller = _form.getField<T>(widget.tag);
+
     return ListenableBuilder(
-      listenable: _controller,
-      builder: (context, child) => widget.builder(context, _controller, child),
+      listenable: controller,
+      builder: (context, child) => widget.builder(context, controller, child),
       child: widget.child,
     );
   }
 
   @override
   void deactivate() {
-    InputForm.controllerOf(context).remove(widget.tag);
+    _form.deactivate(widget.tag);
     super.deactivate();
-  }
-
-  FieldController<T> _buildController() {
-    return FieldController(
-      tag: widget.tag,
-      parent: InputForm.controllerOf(context),
-      initialValue: widget.initialValue,
-      autoValidate: widget.autoValidate,
-    );
   }
 }

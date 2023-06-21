@@ -7,14 +7,14 @@ import 'package:uniform/src/core/form_controller.dart';
 
 class InputForm extends StatefulWidget {
   const InputForm({
+    required this.controller,
     required this.child,
-    this.controller,
     this.onError,
     super.key,
   });
 
+  final FormController controller;
   final Widget child;
-  final FormController? controller;
   final ValueChanged<Map<Object, InputFieldError>>? onError;
 
   static FormController controllerOf(
@@ -35,7 +35,7 @@ class _InputFormState extends State<InputForm> {
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller ?? FormController();
+    _controller = widget.controller;
 
     if (widget.onError != null) {
       _controller.addListener(() => widget.onError!(_controller.errors));
@@ -52,7 +52,7 @@ class _InputFormState extends State<InputForm> {
 
   @override
   void dispose() {
-    widget.controller == null ? _controller.dispose() : _controller.reset();
+    _controller.reset();
     super.dispose();
   }
 }

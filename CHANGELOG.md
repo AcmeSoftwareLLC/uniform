@@ -1,4 +1,11 @@
 # Changelog
+## 2.0.0
+**Jun 21, 2023**
+- Sets `controller` property in `InputForm` as required.
+- Adds `activate` and `deactivate` methods to `FieldController`.
+- Adds `setInitialValues` to `FormController`.
+- Removes `initialValue` and `autoValidate` from field builders.
+
 ## 1.0.3
 **Jun 15, 2023**
 - Fixes pub.dev analyzing issue due to Dart constraint.

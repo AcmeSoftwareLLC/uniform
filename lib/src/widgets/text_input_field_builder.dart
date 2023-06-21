@@ -10,8 +10,6 @@ class TextInputFieldBuilder extends StatefulWidget {
   const TextInputFieldBuilder({
     required this.tag,
     required this.builder,
-    this.initialValue,
-    this.autoValidate = false,
     super.key,
   });
 
@@ -21,8 +19,6 @@ class TextInputFieldBuilder extends StatefulWidget {
     TextFieldController,
     TextEditingController,
   ) builder;
-  final String? initialValue;
-  final bool autoValidate;
 
   @override
   State<TextInputFieldBuilder> createState() => _TextInputFieldBuilderState();
@@ -31,18 +27,23 @@ class TextInputFieldBuilder extends StatefulWidget {
 class _TextInputFieldBuilderState extends State<TextInputFieldBuilder> {
   late TextFieldController _controller;
   late final TextEditingController _textController;
+  late final FormController _form;
 
   @override
   void initState() {
     super.initState();
-    _textController = TextEditingController();
-    _controller = TextFieldController(
-      tag: widget.tag,
-      parent: InputForm.controllerOf(context),
-      initialValue: widget.initialValue,
-      autoValidate: widget.autoValidate,
+    _form = InputForm.controllerOf(context)..activate(widget.tag);
+
+    final controller = _form.getField<String>(widget.tag);
+    assert(
+      controller is TextFieldController,
+      'The controller for tag '
+      '"${widget.tag}" must be a TextFieldController.',
     );
 
+    _controller = controller as TextFieldController;
+
+    _textController = TextEditingController(text: _controller.value);
     _controller.addListener(_updateTextEditingValue);
   }
 
@@ -58,7 +59,7 @@ class _TextInputFieldBuilderState extends State<TextInputFieldBuilder> {
 
   @override
   void deactivate() {
-    InputForm.controllerOf(context).remove(widget.tag);
+    _form.deactivate(widget.tag);
     super.deactivate();
   }
 
