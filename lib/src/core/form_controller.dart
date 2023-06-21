@@ -90,25 +90,30 @@ class FormController extends ChangeNotifier {
     return isFormValid;
   }
 
+  /// Sets the field bound with the [tag] as active.
   void activate(Object tag) => _activeTags.add(tag);
+
+  /// Sets the field bound with the [tag] as inactive.
   void deactivate(Object tag) => _activeTags.remove(tag);
 
   /// Resets the form to initial state.
   void reset() {
-    _fields.clear();
+    for (final field in _fields.values) {
+      field.reset();
+    }
+
     _states
       ..clear()
       ..addAll({InputFormState.pristine, InputFormState.untouched});
     _errors.clear();
-
-    for (final field in _fields.values) {
-      field.dispose();
-    }
   }
 
   @override
   void dispose() {
-    reset();
+    for (final field in _fields.values) {
+      field.dispose();
+    }
+    _fields.clear();
     super.dispose();
   }
 

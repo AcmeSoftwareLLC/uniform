@@ -145,6 +145,13 @@ class FieldController<T extends Object> extends ChangeNotifier {
     addListener(() => listener(value));
   }
 
+  void reset() {
+    _value = _initialValue;
+    _lastErrorValue = null;
+    _isSubmitted = false;
+    _error = InputFieldError.none();
+  }
+
   @override
   String toString() => 'FieldController[$tag]: $value';
 }
