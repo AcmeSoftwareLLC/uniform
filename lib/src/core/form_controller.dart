@@ -25,7 +25,7 @@ class FormController extends ChangeNotifier {
     InputFormState.untouched,
   };
   final Map<Object, InputFieldError> _errors = {};
-  final Map<Object, Completer<void>> _fieldCompleter = {};
+  final Set<Object> _activeTags = {};
 
   /// The current [errors] of this form.
   Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
@@ -51,12 +51,7 @@ class FormController extends ChangeNotifier {
   }
 
   /// Gets the [FieldController] bound with the [tag].
-  ///
-  /// Waits for the form to be initialized if it hasn't been initialized yet.
-  Future<FieldController<T>> call<T extends Object>(Object tag) async {
-    if (!_fields.containsKey(tag)) {
-      await _fieldCompleter.putIfAbsent(tag, Completer.new).future;
-    }
+  FieldController<T> call<T extends Object>(Object tag) {
     return getField(tag);
   }
 
@@ -98,8 +93,8 @@ class FormController extends ChangeNotifier {
     return isFormValid;
   }
 
-  /// Removes the field bound with the [tag].
-  void remove(Object tag) => _fields.remove(tag);
+  void activate(Object tag) => _activeTags.add(tag);
+  void deactivate(Object tag) => _activeTags.remove(tag);
 
   /// Resets the form to initial state.
   void reset() {

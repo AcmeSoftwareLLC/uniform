@@ -4,6 +4,7 @@
 
 import 'package:flutter/foundation.dart';
 import 'package:uniform/uniform.dart';
+import 'package:uniform_example/login_page.dart';
 import 'package:uniform_example/validators/email_input_field_validator.dart';
 import 'package:uniform_example/validators/password_input_field_validator.dart';
 
@@ -19,7 +20,7 @@ class LoginViewModel extends ChangeNotifier {
     formController = FormController(
       validators: {const InputFieldValidator.required()},
     );
-    _initValidators();
+    _initFieldControllers();
   }
 
   late final FormController formController;
@@ -42,13 +43,16 @@ class LoginViewModel extends ChangeNotifier {
     }
   }
 
-  Future<void> _initValidators() async {
-    final emailController = await formController(LoginFormTags.email);
-    emailController
+  Future<void> _initFieldControllers() async {
+    TextFieldController.create(formController, tag: LoginFormTags.email)
       ..setValidators({const EmailInputFieldValidator()})
       ..setValue('sales@acme-software.com');
-
-    final passwordController = await formController(LoginFormTags.password);
-    passwordController.setValidators({const PasswordInputFieldValidator()});
+    TextFieldController.create(formController, tag: LoginFormTags.password)
+        .setValidators({const PasswordInputFieldValidator()});
+    FieldController<Gender>.create(formController, tag: LoginFormTags.gender);
+    FieldController<bool>.create(
+      formController,
+      tag: LoginFormTags.rememberMe,
+    ).setValue(false);
   }
 }

@@ -12,19 +12,32 @@ part of 'form_controller.dart';
 ///  but can be used to handle text input more gracefully.
 class FieldController<T extends Object> extends ChangeNotifier {
   /// Creates an instance of [FieldController].
-  FieldController({
+  FieldController._({
     required this.tag,
     required this.parent,
     this.initialValue,
     this.autoValidate = false,
-  }) : assert(!parent._fields.containsKey(tag), '\nDuplicate field tag: $tag') {
+  }) {
     parent._fields[tag] = this;
-
-    final completer = parent._fieldCompleter[tag];
-    if (completer != null && !completer.isCompleted) completer.complete();
 
     _value = initialValue;
     _validators = parent._validators;
+  }
+
+  /// Creates an instance of [FieldController] if not attached to the [parent].
+  factory FieldController.create(
+    FormController parent, {
+    required Object tag,
+    T? initialValue,
+    bool autoValidate = false,
+  }) {
+    return parent._fields[tag] as FieldController<T>? ??
+        FieldController._(
+          tag: tag,
+          parent: parent,
+          initialValue: initialValue,
+          autoValidate: autoValidate,
+        );
   }
 
   /// The tag of this field.
@@ -132,12 +145,27 @@ class FieldController<T extends Object> extends ChangeNotifier {
 ///
 ///  * [FieldController], which is generic controller that support any type.
 class TextFieldController extends FieldController<String> {
-  TextFieldController({
+  TextFieldController._({
     required super.tag,
     required super.parent,
     super.initialValue,
     super.autoValidate,
-  });
+  }) : super._();
+
+  factory TextFieldController.create(
+    FormController parent, {
+    required Object tag,
+    String? initialValue,
+    bool autoValidate = false,
+  }) {
+    return parent._fields[tag] as TextFieldController? ??
+        TextFieldController._(
+          tag: tag,
+          parent: parent,
+          initialValue: initialValue,
+          autoValidate: autoValidate,
+        );
+  }
 
   bool _isIMEInput = false;
 
