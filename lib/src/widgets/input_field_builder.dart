@@ -11,16 +11,12 @@ class InputFieldBuilder<T extends Object> extends StatefulWidget {
     required this.tag,
     required this.builder,
     this.child,
-    this.initialValue,
-    this.autoValidate = false,
     super.key,
   });
 
   final Object tag;
   final Widget Function(BuildContext, FieldController<T>, Widget?) builder;
   final Widget? child;
-  final T? initialValue;
-  final bool autoValidate;
 
   @override
   State<InputFieldBuilder<T>> createState() => _InputFieldBuilderState<T>();

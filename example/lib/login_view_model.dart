@@ -11,8 +11,8 @@ import 'package:uniform_example/validators/password_input_field_validator.dart';
 enum LoginFormTags {
   email,
   password,
+  selectGender,
   gender,
-  rememberMe,
 }
 
 class LoginViewModel extends ChangeNotifier {
@@ -20,14 +20,45 @@ class LoginViewModel extends ChangeNotifier {
     formController = FormController(
       validators: {const InputFieldValidator.required()},
     );
-    _initFieldControllers();
+
+    _emailField = TextFieldController.create(
+      formController,
+      tag: LoginFormTags.email,
+    )
+      ..setValidators({const EmailInputFieldValidator()})
+      ..setInitialValue('sales@acme-software.com');
+
+    _passwordField = TextFieldController.create(
+      formController,
+      tag: LoginFormTags.password,
+      autoValidate: true,
+    )..setValidators({const PasswordInputFieldValidator()});
+
+    FieldController<bool>.create(
+      formController,
+      tag: LoginFormTags.selectGender,
+    )
+      ..setInitialValue(false)
+      ..onUpdate(_onSelectGenderUpdate);
+
+    _genderField = FieldController<Gender>.create(
+      formController,
+      tag: LoginFormTags.gender,
+    );
   }
 
   late final FormController formController;
 
+  late final TextFieldController _emailField;
+  late final TextFieldController _passwordField;
+  late final FieldController<Gender> _genderField;
+
   Map<Object, Object?> _userData = {};
+  bool _requireGender = false;
 
   Map<Object, Object?> get userData => _userData;
+
+  bool get requireGender => _requireGender;
 
   Future<void> login() async {
     if (formController.validate()) {
@@ -36,23 +67,21 @@ class LoginViewModel extends ChangeNotifier {
       // Simulates login
       await Future<void>.delayed(const Duration(seconds: 2));
 
-      _userData = formController.values;
+      _userData = {
+        'Email Address': _emailField.value,
+        'Password': _passwordField.value,
+        'Gender': _genderField.value?.name,
+      };
       notifyListeners();
 
       formController.setSubmitted(false);
     }
   }
 
-  Future<void> _initFieldControllers() async {
-    TextFieldController.create(formController, tag: LoginFormTags.email)
-      ..setValidators({const EmailInputFieldValidator()})
-      ..setValue('sales@acme-software.com');
-    TextFieldController.create(formController, tag: LoginFormTags.password)
-        .setValidators({const PasswordInputFieldValidator()});
-    FieldController<Gender>.create(formController, tag: LoginFormTags.gender);
-    FieldController<bool>.create(
-      formController,
-      tag: LoginFormTags.rememberMe,
-    ).setValue(false);
+  void _onSelectGenderUpdate(bool? selectGender) {
+    _requireGender = selectGender ?? false;
+    notifyListeners();
+
+    if (!_requireGender) formController.deactivate(LoginFormTags.gender);
   }
 }

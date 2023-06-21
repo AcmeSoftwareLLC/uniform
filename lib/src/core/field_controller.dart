@@ -15,12 +15,10 @@ class FieldController<T extends Object> extends ChangeNotifier {
   FieldController._({
     required this.tag,
     required this.parent,
-    this.initialValue,
     this.autoValidate = false,
   }) {
     parent._fields[tag] = this;
 
-    _value = initialValue;
     _validators = parent._validators;
   }
 
@@ -28,14 +26,12 @@ class FieldController<T extends Object> extends ChangeNotifier {
   factory FieldController.create(
     FormController parent, {
     required Object tag,
-    T? initialValue,
     bool autoValidate = false,
   }) {
     return parent._fields[tag] as FieldController<T>? ??
         FieldController._(
           tag: tag,
           parent: parent,
-          initialValue: initialValue,
           autoValidate: autoValidate,
         );
   }
@@ -48,14 +44,12 @@ class FieldController<T extends Object> extends ChangeNotifier {
   /// The parent [FormController] of this field.
   final FormController parent;
 
-  /// The initial value of this field.
-  final T? initialValue;
-
   /// Whether this field should be automatically validated.
   final bool autoValidate;
 
   late Set<InputFieldValidator> _validators;
 
+  T? _initialValue;
   T? _value;
   T? _lastErrorValue;
   bool _isSubmitted = false;
@@ -67,7 +61,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
   InputFieldError get error => _error;
 
   /// Returns true if the field has been modified.
-  bool get isDirty => _value != initialValue;
+  bool get isDirty => _value != _initialValue;
 
   /// Returns true if the field has been submitted with [setSubmitted].
   bool get isSubmitted => _isSubmitted;
@@ -77,12 +71,23 @@ class FieldController<T extends Object> extends ChangeNotifier {
     _validators = parent._validators.union(validators);
   }
 
+  /// Sets the initial [value] of the field.
+  ///
+  /// Setting value does not make the field dirty.
+  /// Use [setValue] to set the value and make the field dirty.
+  void setInitialValue(T? value, {bool notify = false}) {
+    _initialValue = value;
+    setValue(value, notify: notify);
+  }
+
   /// Sets the [value] of the field.
   ///
   /// This should be used while programmatically setting the value of the field.
   /// If [notify] is true, this will notify listeners.
   ///
   /// For setting the value using field components, use [onChanged].
+  /// For setting the value,
+  /// without making the field dirty use [setInitialValue].
   void setValue(T? value, {bool notify = true}) {
     parent._setDirty();
     _value = value;
@@ -135,6 +140,11 @@ class FieldController<T extends Object> extends ChangeNotifier {
     return true;
   }
 
+  /// Callback for listening to changes in the field.
+  void onUpdate(void Function(T? value) listener) {
+    addListener(() => listener(value));
+  }
+
   @override
   String toString() => 'FieldController[$tag]: $value';
 }
@@ -148,21 +158,18 @@ class TextFieldController extends FieldController<String> {
   TextFieldController._({
     required super.tag,
     required super.parent,
-    super.initialValue,
     super.autoValidate,
   }) : super._();
 
   factory TextFieldController.create(
     FormController parent, {
     required Object tag,
-    String? initialValue,
     bool autoValidate = false,
   }) {
     return parent._fields[tag] as TextFieldController? ??
         TextFieldController._(
           tag: tag,
           parent: parent,
-          initialValue: initialValue,
           autoValidate: autoValidate,
         );
   }

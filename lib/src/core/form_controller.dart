@@ -2,8 +2,6 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
-import 'dart:async';
-
 import 'package:flutter/foundation.dart';
 import 'package:uniform/src/core/input_form_state.dart';
 
@@ -31,7 +29,10 @@ class FormController extends ChangeNotifier {
   Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
 
   /// All the field [tags] bound to this form.
-  Iterable<Object> get tags => _fields.keys;
+  Set<Object> get tags => Set.unmodifiable(_fields.keys);
+
+  /// All the field [tags] active in the form.
+  Set<Object> get activeTags => Set.unmodifiable(_activeTags);
 
   /// The current [states] of this form.
   Set<InputFormState> get states => Set.unmodifiable(_states);
@@ -45,10 +46,6 @@ class FormController extends ChangeNotifier {
 
   /// Returns true if the form has been submitted.
   bool get isSubmitted => states.contains(InputFormState.submitted);
-
-  void _setError(InputFieldError error) {
-    _errors[error.tag] = error;
-  }
 
   /// Gets the [FieldController] bound with the [tag].
   FieldController<T> call<T extends Object>(Object tag) {
@@ -81,7 +78,7 @@ class FormController extends ChangeNotifier {
   /// If [notify] is true,
   /// the form will notify its listeners if the form is invalid.
   bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = tags == null ? _fields.values : tags.map(getField);
+    final fields = (tags ?? _activeTags).map(getField);
 
     var isFormValid = true;
     for (final field in fields) {
@@ -161,5 +158,9 @@ class FormController extends ChangeNotifier {
         ..add(InputFormState.invalid);
       notifyListeners();
     }
+  }
+
+  void _setError(InputFieldError error) {
+    _errors[error.tag] = error;
   }
 }

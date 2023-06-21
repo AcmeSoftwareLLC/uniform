@@ -45,22 +45,31 @@ class _LoginPageState extends State<LoginPage> {
                 tag: LoginFormTags.password,
                 hintText: 'Password',
                 obscureText: true,
-                autoValidate: true,
-              ),
-              const SizedBox(height: 16),
-              DropdownInputField(
-                tag: LoginFormTags.gender,
-                hintText: 'Gender',
-                menuEntries: [
-                  for (final gender in Gender.values)
-                    DropdownMenuEntry(value: gender, label: gender.name),
-                ],
-                width: MediaQuery.sizeOf(context).width - 32,
               ),
               const SizedBox(height: 16),
               const CheckboxInputField(
-                tag: LoginFormTags.rememberMe,
-                label: 'Remember me',
+                tag: LoginFormTags.selectGender,
+                label: 'Select Gender',
+              ),
+              ListenableBuilder(
+                listenable: viewModel,
+                builder: (context, child) {
+                  if (viewModel.requireGender) return child!;
+
+                  return const SizedBox.shrink();
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 16),
+                  child: DropdownInputField(
+                    tag: LoginFormTags.gender,
+                    hintText: 'Gender',
+                    menuEntries: [
+                      for (final gender in Gender.values)
+                        DropdownMenuEntry(value: gender, label: gender.name),
+                    ],
+                    width: MediaQuery.sizeOf(context).width - 32,
+                  ),
+                ),
               ),
               const SizedBox(height: 40),
               FormButton(
@@ -81,7 +90,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   void _onViewModelUpdate() {
-    if (viewModel.userData.isNotEmpty) {
+    final userData = Map.of(viewModel.userData);
+
+    if (userData.isNotEmpty) {
+      viewModel.userData.clear();
+
       showDialog<void>(
         context: context,
         barrierDismissible: false,
@@ -92,8 +105,8 @@ class _LoginPageState extends State<LoginPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                for (final entry in viewModel.userData.entries)
-                  Text('${(entry.key as Enum).name}: ${entry.value}'),
+                for (final MapEntry(:key, :value) in userData.entries)
+                  Text('$key: $value'),
               ],
             ),
             actions: [
@@ -106,22 +119,6 @@ class _LoginPageState extends State<LoginPage> {
         },
       );
     }
-  }
-
-  void showLoading() {
-    showDialog<void>(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) => const Dialog(
-        child: Padding(
-          padding: EdgeInsets.all(16),
-          child: SizedBox.square(
-            dimension: 24,
-            child: CircularProgressIndicator(),
-          ),
-        ),
-      ),
-    );
   }
 }
 

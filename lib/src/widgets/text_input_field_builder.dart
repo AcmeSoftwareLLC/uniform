@@ -10,8 +10,6 @@ class TextInputFieldBuilder extends StatefulWidget {
   const TextInputFieldBuilder({
     required this.tag,
     required this.builder,
-    this.initialValue,
-    this.autoValidate = false,
     super.key,
   });
 
@@ -21,8 +19,6 @@ class TextInputFieldBuilder extends StatefulWidget {
     TextFieldController,
     TextEditingController,
   ) builder;
-  final String? initialValue;
-  final bool autoValidate;
 
   @override
   State<TextInputFieldBuilder> createState() => _TextInputFieldBuilderState();
@@ -46,6 +42,7 @@ class _TextInputFieldBuilderState extends State<TextInputFieldBuilder> {
     );
 
     _controller = controller as TextFieldController;
+
     _textController = TextEditingController(text: _controller.value);
     _controller.addListener(_updateTextEditingValue);
   }
