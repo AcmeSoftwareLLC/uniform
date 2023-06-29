@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.1
+**Jun 29, 2023**
+- Adds `remove` method to `FormController`.
+
 ## 2.0.0
 **Jun 21, 2023**
 - Sets `controller` property in `InputForm` as required.

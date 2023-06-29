@@ -96,6 +96,15 @@ class FormController extends ChangeNotifier {
   /// Sets the field bound with the [tag] as inactive.
   void deactivate(Object tag) => _activeTags.remove(tag);
 
+  /// Removes the field bound with the [tag].
+  void remove(Object tag) {
+    final controller = _fields.remove(tag);
+    _activeTags.remove(tag);
+    _errors.remove(tag);
+
+    controller?.dispose();
+  }
+
   /// Resets the form to initial state.
   void reset() {
     for (final field in _fields.values) {
