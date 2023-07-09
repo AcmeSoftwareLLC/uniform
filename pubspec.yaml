@@ -7,6 +7,11 @@ issue_tracker: https://github.com/AcmeSoftwareLLC/uniform/issues
 screenshots:
   - description: 'uniForm: A Flutter Form Library'
     path: images/uniform.png
+topics:
+  - form
+  - validation
+  - reactive
+  - forms
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
