@@ -10,17 +10,13 @@ part of 'form_controller.dart';
 ///
 ///  * [TextFieldController], which is similar to [FieldController]
 ///  but can be used to handle text input more gracefully.
-class FieldController<T extends Object> extends ChangeNotifier {
+class FieldController<T extends Object> extends _FieldControllerBase<T> {
   /// Creates an instance of [FieldController].
   FieldController._({
-    required this.tag,
-    required this.parent,
-    this.autoValidate = false,
-  }) {
-    parent._fields[tag] = this;
-
-    _validators = parent._validators;
-  }
+    required super.tag,
+    required super.parent,
+    super.autoValidate = false,
+  }) : super._();
 
   /// Creates an instance of [FieldController] if not attached to the [parent].
   factory FieldController.create(
@@ -28,7 +24,8 @@ class FieldController<T extends Object> extends ChangeNotifier {
     required Object tag,
     bool autoValidate = false,
   }) {
-    return parent._fields[tag] as FieldController<T>? ??
+    final field = parent._fields[tag] as FieldController<T>?;
+    return field ??
         FieldController._(
           tag: tag,
           parent: parent,
@@ -36,58 +33,18 @@ class FieldController<T extends Object> extends ChangeNotifier {
         );
   }
 
-  /// The tag of this field.
-  ///
-  /// This must be unique within the parent [FormController].
-  final Object tag;
-
-  /// The parent [FormController] of this field.
-  final FormController parent;
-
-  /// Whether this field should be automatically validated.
-  final bool autoValidate;
-
-  late Set<InputFieldValidator> _validators;
-
-  T? _initialValue;
-  T? _value;
-  T? _lastErrorValue;
-  bool _isSubmitted = false;
-  InputFieldError _error = InputFieldError.none();
-
-  T? get value => _value;
-
-  /// The current error of this field.
-  InputFieldError get error => _error;
-
-  /// Returns true if the field has been modified.
-  bool get isDirty => _value != _initialValue;
-
-  /// Returns true if the field has been submitted with [setSubmitted].
-  bool get isSubmitted => _isSubmitted;
-
-  /// Sets the [validators] for the field.
+  @override
   void setValidators(Set<InputFieldValidator> validators) {
     _validators = parent._validators.union(validators);
   }
 
-  /// Sets the initial [value] of the field.
-  ///
-  /// Setting value does not make the field dirty.
-  /// Use [setValue] to set the value and make the field dirty.
+  @override
   void setInitialValue(T? value, {bool notify = false}) {
     _initialValue = value;
     setValue(value, notify: notify);
   }
 
-  /// Sets the [value] of the field.
-  ///
-  /// This should be used while programmatically setting the value of the field.
-  /// If [notify] is true, this will notify listeners.
-  ///
-  /// For setting the value using field components, use [onChanged].
-  /// For setting the value,
-  /// without making the field dirty use [setInitialValue].
+  @override
   void setValue(T? value, {bool notify = true}) {
     parent._setDirty();
     _value = value;
@@ -97,9 +54,7 @@ class FieldController<T extends Object> extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 
-  /// Sets the [error] of the field.
-  ///
-  /// If [notify] is true, this will notify listeners.
+  @override
   void setError(InputFieldError error, {bool notify = true}) {
     _error = error;
     _lastErrorValue = _value;
@@ -107,27 +62,19 @@ class FieldController<T extends Object> extends ChangeNotifier {
     if (notify) notifyListeners();
   }
 
-  /// Sets the [value] for [isSubmitted] of the field.
-  // ignore: avoid_positional_boolean_parameters
+  @override
   void setSubmitted(bool value) {
     _isSubmitted = value;
     notifyListeners();
   }
 
-  /// Sets the [value] of the field.
-  ///
-  /// This should be used while changing the value using field components.
-  /// If [notify] is true, this will notify listeners.
-  ///
-  /// For setting the value programmatically, use [setValue].
+  @override
   void onChanged(T? value, {bool notify = true}) {
     parent._setTouched();
     setValue(value, notify: notify);
   }
 
-  /// Validates the field.
-  ///
-  /// If [notify] is true, this will notify listeners.
+  @override
   bool validate({bool notify = true}) {
     for (final validator in _validators) {
       final error = validator.resolve(_value).._tag = tag;
@@ -140,11 +87,12 @@ class FieldController<T extends Object> extends ChangeNotifier {
     return true;
   }
 
-  /// Callback for listening to changes in the field.
+  @override
   void onUpdate(void Function(T? value) listener) {
     addListener(() => listener(value));
   }
 
+  @override
   void reset() {
     _value = _initialValue;
     _lastErrorValue = null;

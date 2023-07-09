@@ -5,7 +5,7 @@ abstract class _FormControllerBase extends ChangeNotifier {
     Set<InputFieldValidator> validators = const {},
   }) : _validators = validators;
 
-  final Map<Object, FieldController> _fields = {};
+  final Map<Object, _FieldControllerBase> _fields = {};
   final Set<InputFieldValidator> _validators;
   final Set<InputFormState> _states = {
     InputFormState.pristine,

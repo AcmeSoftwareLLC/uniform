@@ -5,8 +5,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:uniform/src/core/input_form_state.dart';
 
-part 'form_controller_base.dart';
 part 'field_controller.dart';
+part 'field_controller_base.dart';
+part 'form_controller_base.dart';
 part 'input_field_error.dart';
 part 'input_field_validator.dart';
 
