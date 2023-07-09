@@ -87,5 +87,10 @@ abstract class _FieldControllerBase<T extends Object> extends ChangeNotifier {
   void onUpdate(void Function(T? value) listener);
 
   /// Resets the field to its initial value.
-  void reset();
+  void reset() {
+    _value = _initialValue;
+    _lastErrorValue = null;
+    _isSubmitted = false;
+    _error = InputFieldError.none();
+  }
 }

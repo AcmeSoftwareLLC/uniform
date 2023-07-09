@@ -93,14 +93,6 @@ class FieldController<T extends Object> extends _FieldControllerBase<T> {
   }
 
   @override
-  void reset() {
-    _value = _initialValue;
-    _lastErrorValue = null;
-    _isSubmitted = false;
-    _error = InputFieldError.none();
-  }
-
-  @override
   String toString() => 'FieldController[$tag]: $value';
 }
 

@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.2
+**Jul 9, 2023**
+- Adds base classes and code clean up.
+
 ## 2.0.1
 **Jun 29, 2023**
 - Adds `remove` method to `FormController`.
