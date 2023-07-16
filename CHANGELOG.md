@@ -1,4 +1,9 @@
 # Changelog
+## 2.0.3
+**Jul 16, 2023**
+- Adds diagnostic properties to builders.
+- Updates readme.
+
 ## 2.0.2
 **Jul 9, 2023**
 - Adds base classes and code clean up.

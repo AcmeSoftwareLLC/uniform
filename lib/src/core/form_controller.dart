@@ -12,9 +12,9 @@ part 'input_field_error.dart';
 part 'input_field_validator.dart';
 
 /// A controller for a form.
-class FormController extends _FormControllerBase {
+class FormController extends _FormControllerBase with Diagnosticable {
   /// Creates an instance of [FormController].
-  FormController({super.validators});
+  FormController({super.validators, super.debugLabel});
 
   @override
   FieldController<T> getField<T extends Object>(Object tag) {
@@ -111,5 +111,27 @@ class FormController extends _FormControllerBase {
     for (final entry in initialValues.entries) {
       getField(entry.key).setInitialValue(entry.value, notify: notify);
     }
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(StringProperty('name', debugLabel, defaultValue: null))
+      ..add(IterableProperty<Object>('tags', tags))
+      ..add(IterableProperty<Object>('activeTags', activeTags))
+      ..add(IterableProperty<Object>('states', states));
+    super.debugFillProperties(properties);
+  }
+
+  @override
+  DiagnosticsNode toDiagnosticsNode({
+    String? name,
+    DiagnosticsTreeStyle? style,
+  }) {
+    return DiagnosticableNode(
+      name: name ?? 'controller',
+      value: this,
+      style: style ?? DiagnosticsTreeStyle.sparse,
+    );
   }
 }

@@ -10,7 +10,8 @@ part of 'form_controller.dart';
 ///
 ///  * [TextFieldController], which is similar to [FieldController]
 ///  but can be used to handle text input more gracefully.
-class FieldController<T extends Object> extends _FieldControllerBase<T> {
+class FieldController<T extends Object> extends _FieldControllerBase<T>
+    with Diagnosticable {
   /// Creates an instance of [FieldController].
   FieldController._({
     required super.tag,
@@ -93,7 +94,29 @@ class FieldController<T extends Object> extends _FieldControllerBase<T> {
   }
 
   @override
-  String toString() => 'FieldController[$tag]: $value';
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(DiagnosticsProperty('tag', tag))
+      ..add(DiagnosticsProperty('value', value, defaultValue: _initialValue))
+      ..add(
+        DiagnosticsProperty('initialValue', value, defaultValue: _initialValue),
+      )
+      ..add(DiagnosticsProperty('error', error))
+      ..add(DiagnosticsProperty('parent', parent));
+    super.debugFillProperties(properties);
+  }
+
+  @override
+  DiagnosticsNode toDiagnosticsNode({
+    String? name,
+    DiagnosticsTreeStyle? style,
+  }) {
+    return DiagnosticableNode(
+      name: name ?? 'controller',
+      value: this,
+      style: style ?? DiagnosticsTreeStyle.sparse,
+    );
+  }
 }
 
 /// A controller for a single [String] field in a [FormController].
