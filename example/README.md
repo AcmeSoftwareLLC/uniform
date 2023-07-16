@@ -23,7 +23,6 @@ InputForm(
       const SizedBox(height: 16),
       InputFieldBuilder<bool>(
         tag: 'remember_me',
-        initialValue: false,
         builder: (context, controller, _) {
           return CheckboxListTile(
             title: const Text('Remember Me'),
