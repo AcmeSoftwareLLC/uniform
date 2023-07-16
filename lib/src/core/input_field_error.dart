@@ -20,6 +20,9 @@ class InputFieldError {
 
   // ignore: prefer_final_fields
   Object _tag = Object();
+
+  @override
+  String toString() => message ?? super.toString();
 }
 
 class _NoInputFieldError extends InputFieldError {}

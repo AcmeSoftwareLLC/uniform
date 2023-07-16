@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 import 'package:uniform/src/widgets/input_form.dart';
@@ -47,5 +48,13 @@ class _InputFieldBuilderState<T extends Object>
   void deactivate() {
     _form.deactivate(widget.tag);
     super.deactivate();
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties.add(
+      _form.getField<T>(widget.tag).toDiagnosticsNode(),
+    );
+    super.debugFillProperties(properties);
   }
 }
