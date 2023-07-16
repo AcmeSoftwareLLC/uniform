@@ -5,16 +5,23 @@
 import 'package:flutter/material.dart';
 import 'package:uniform/src/core/form_controller.dart';
 import 'package:uniform/src/widgets/input_form.dart';
+import 'package:uniform/src/widgets/uniform_builder.dart';
 
-class InputActionBuilder extends StatelessWidget {
-  const InputActionBuilder({required this.builder, this.child, super.key});
+class UniformFieldBuilder extends StatelessWidget {
+  const UniformFieldBuilder({
+    required this.tag,
+    required this.builder,
+    this.child,
+    super.key,
+  });
 
-  final Widget Function(BuildContext, FormController, Widget?) builder;
+  final Object tag;
+  final UniformWidgetBuilder<FieldController> builder;
   final Widget? child;
 
   @override
   Widget build(BuildContext context) {
-    final controller = InputForm.controllerOf(context);
+    final controller = InputForm.controllerOf(context)(tag);
 
     return ListenableBuilder(
       listenable: controller,

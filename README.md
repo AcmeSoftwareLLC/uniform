@@ -26,6 +26,7 @@ Uniform handles the repetitive and annoying stuff—keeping track of values/erro
 
 ## Features
 
+- 🪶 Lightweight & extensive.
 - 🎮 Unified form representation using controllers.
 - 🔄 Easy and customizable form validation API.
 - 🔧 Built-in support for form submission and state management.

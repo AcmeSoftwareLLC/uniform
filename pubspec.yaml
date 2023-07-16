@@ -1,5 +1,5 @@
 name: uniform
-description: A form library for Flutter that handles form validation and state management gracefully, with unified form representation.
+description: A lightweight form library for Flutter that handles form validation and state management gracefully, with unified form representation.
 version: 2.0.2
 homepage: https://acmesoftware.com
 repository: https://github.com/AcmeSoftwareLLC/uniform
