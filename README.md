@@ -6,7 +6,7 @@
 
 <p align="center">
 <a href="https://pub.dev/packages/uniform"><img src="https://img.shields.io/pub/v/uniform?label=pub.dev&labelColor=333940&logo=dart"></a>
-<a href="https://pub.dev/packages/uniform"><img src="https://img.shields.io/pub/points/uniform"></a>
+<a href="https://pub.dev/packages/uniform"><img src="https://img.shields.io/pub/points/uniform?label=Pub%20Points&logo=dart"></a>
 <a href="https://github.com/AcmeSoftwareLLC/uniform/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-BSD--3-informational" alt="BSD-3 License"></a>
 <a href="https://acmesoftware.com"><img src="https://img.shields.io/website?url=https%3A%2F%2Facmesoftware.com" alt="Website"></a>
 <a href="https://www.linkedin.com/company/acmesoftware"><img src="https://img.shields.io/badge/Connect--000?style=social&logo=linkedin" alt="Connect with Acme Software on Linkedin"></a>
@@ -26,12 +26,12 @@ Uniform handles the repetitive and annoying stuff—keeping track of values/erro
 
 ## Features
 
-- Unified form representation using controllers.
-- Easy and customizable form validation API.
-- Built-in support for form submission and state management.
-- Builders for quickly creating form fields.
-- Compatible with any state management solution or vanilla Flutter States.
-- Supports for global and local validators.
+- 🎮 Unified form representation using controllers.
+- 🔄 Easy and customizable form validation API.
+- 🔧 Built-in support for form submission and state management.
+- 🛠️ Builders for quickly creating form fields.
+- 🚀 Compatible with any state management solution or vanilla Flutter States.
+- 🔒 Supports for global and local validators.
 
 ## Getting started
 
