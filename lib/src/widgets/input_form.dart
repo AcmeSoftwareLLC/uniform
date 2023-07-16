@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 
@@ -48,6 +49,20 @@ class _InputFormState extends State<InputForm> {
       controller: _controller,
       child: widget.child,
     );
+  }
+
+  @override
+  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
+    properties
+      ..add(StringProperty('name', _controller.debugLabel, defaultValue: null))
+      ..add(IterableProperty<Object>('tags', _controller.tags))
+      ..add(
+        IterableProperty<Object>('activeTags', _controller.activeTags),
+      )
+      ..add(
+        IterableProperty<Object>('states', _controller.states),
+      );
+    super.debugFillProperties(properties);
   }
 
   @override

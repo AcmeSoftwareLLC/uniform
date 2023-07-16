@@ -19,6 +19,7 @@ class LoginViewModel extends ChangeNotifier {
   LoginViewModel()
       : formController = FormController(
           validators: {const InputFieldValidator.required()},
+          debugLabel: 'LoginFormController',
         ) {
     _emailField = TextFieldController.create(
       formController,

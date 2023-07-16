@@ -14,7 +14,7 @@ part 'input_field_validator.dart';
 /// A controller for a form.
 class FormController extends _FormControllerBase {
   /// Creates an instance of [FormController].
-  FormController({super.validators});
+  FormController({super.validators, super.debugLabel});
 
   @override
   FieldController<T> getField<T extends Object>(Object tag) {

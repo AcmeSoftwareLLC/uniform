@@ -3,7 +3,9 @@ part of 'form_controller.dart';
 abstract class _FormControllerBase extends ChangeNotifier {
   _FormControllerBase({
     Set<InputFieldValidator> validators = const {},
-  }) : _validators = validators;
+    String? debugLabel,
+  })  : _validators = validators,
+        _debugLabel = debugLabel;
 
   final Map<Object, _FieldControllerBase> _fields = {};
   final Set<InputFieldValidator> _validators;
@@ -13,6 +15,21 @@ abstract class _FormControllerBase extends ChangeNotifier {
   };
   final Map<Object, InputFieldError> _errors = {};
   final Set<Object> _activeTags = {};
+
+  /// A debug label that is used for diagnostic output.
+  ///
+  /// Will always return null in release builds.
+  String? get debugLabel => _debugLabel;
+  String? _debugLabel;
+  set debugLabel(String? value) {
+    assert(
+      () {
+        _debugLabel = value;
+        return true;
+      }(),
+      'Only set the value in debug builds.',
+    );
+  }
 
   /// The current [errors] of this form.
   Map<Object, InputFieldError> get errors => Map.unmodifiable(_errors);
@@ -120,4 +137,7 @@ abstract class _FormControllerBase extends ChangeNotifier {
   void _setError(InputFieldError error) {
     _errors[error.tag] = error;
   }
+
+  @override
+  String toString() => 'FormController[$debugLabel]: ${tags.join(', ')}';
 }
