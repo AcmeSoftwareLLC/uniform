@@ -53,15 +53,7 @@ class _InputFormState extends State<InputForm> {
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties
-      ..add(StringProperty('name', _controller.debugLabel, defaultValue: null))
-      ..add(IterableProperty<Object>('tags', _controller.tags))
-      ..add(
-        IterableProperty<Object>('activeTags', _controller.activeTags),
-      )
-      ..add(
-        IterableProperty<Object>('states', _controller.states),
-      );
+    properties.add(_controller.toDiagnosticsNode());
     super.debugFillProperties(properties);
   }
 

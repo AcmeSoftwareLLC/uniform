@@ -25,4 +25,7 @@ class InputFieldError {
   String toString() => message ?? super.toString();
 }
 
-class _NoInputFieldError extends InputFieldError {}
+class _NoInputFieldError extends InputFieldError {
+  @override
+  String toString() => 'none';
+}

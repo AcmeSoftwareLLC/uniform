@@ -96,13 +96,13 @@ class FieldController<T extends Object> extends _FieldControllerBase<T>
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties
-      ..add(DiagnosticsProperty('parent', parent))
       ..add(DiagnosticsProperty('tag', tag))
       ..add(DiagnosticsProperty('value', value, defaultValue: _initialValue))
       ..add(
         DiagnosticsProperty('initialValue', value, defaultValue: _initialValue),
       )
-      ..add(DiagnosticsProperty('error', error));
+      ..add(DiagnosticsProperty('error', error))
+      ..add(DiagnosticsProperty('parent', parent));
     super.debugFillProperties(properties);
   }
 
@@ -114,7 +114,7 @@ class FieldController<T extends Object> extends _FieldControllerBase<T>
     return DiagnosticableNode(
       name: name ?? 'controller',
       value: this,
-      style: style ?? DiagnosticsTreeStyle.flat,
+      style: style ?? DiagnosticsTreeStyle.sparse,
     );
   }
 }
