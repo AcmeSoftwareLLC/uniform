@@ -50,6 +50,11 @@ abstract class _FormControllerBase extends ChangeNotifier {
 
   /// Validates the form.
   ///
+  /// Only the fields that are currently bound to UI are validated.
+  /// If non-UI fields are to be validated as well,
+  /// [activate] method can be used.
+  /// Similarly to ignore validation of non-UI fields [deactivate] can be used.
+  ///
   /// If [tags] is not null,
   /// only the fields with the given [tags] will be validated.
   /// If [notify] is true,

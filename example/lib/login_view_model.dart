@@ -16,11 +16,10 @@ enum LoginFormTags {
 }
 
 class LoginViewModel extends ChangeNotifier {
-  LoginViewModel() {
-    formController = FormController(
-      validators: {const InputFieldValidator.required()},
-    );
-
+  LoginViewModel()
+      : formController = FormController(
+          validators: {const InputFieldValidator.required()},
+        ) {
     _emailField = TextFieldController.create(
       formController,
       tag: LoginFormTags.email,
@@ -52,7 +51,7 @@ class LoginViewModel extends ChangeNotifier {
     );
   }
 
-  late final FormController formController;
+  final FormController formController;
 
   late final TextFieldController _emailField;
   late final TextFieldController _passwordField;
@@ -86,7 +85,11 @@ class LoginViewModel extends ChangeNotifier {
   void _onSelectGenderUpdate(bool? selectGender) {
     _requireGender = selectGender ?? false;
     notifyListeners();
+  }
 
-    if (!_requireGender) formController.deactivate(LoginFormTags.gender);
+  @override
+  void dispose() {
+    formController.dispose();
+    super.dispose();
   }
 }
