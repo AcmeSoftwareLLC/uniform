@@ -6,12 +6,14 @@ import 'package:flutter/material.dart';
 import 'package:uniform/src/core/form_controller.dart';
 import 'package:uniform/src/widgets/input_form.dart';
 
+/// A widget builder that receives a [FormController].
 typedef UniformWidgetBuilder<T extends Object> = Widget Function(
   BuildContext,
   T,
   Widget?,
 );
 
+/// A widget for building a widget subtree when a [FormController] changes.
 class UniformBuilder extends StatelessWidget {
   const UniformBuilder({
     required this.builder,
@@ -19,7 +21,10 @@ class UniformBuilder extends StatelessWidget {
     super.key,
   });
 
+  /// The widget builder.
   final UniformWidgetBuilder<FormController> builder;
+
+  /// The widget below this widget in the tree.
   final Widget? child;
 
   @override

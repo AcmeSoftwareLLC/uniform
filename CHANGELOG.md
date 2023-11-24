@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.4
+**Nov 24, 2023**
+- Adds `autoReset` flag to **InputForm**.
+
 ## 2.0.3
 **Jul 16, 2023**
 - Adds diagnostic properties to builders.

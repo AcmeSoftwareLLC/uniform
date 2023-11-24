@@ -6,18 +6,30 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/form_controller.dart';
 
+/// A widget that provides a [FormController] to its descendants.
 class InputForm extends StatefulWidget {
+  /// Creates an instance of [InputForm].
   const InputForm({
     required this.controller,
     required this.child,
     this.onError,
+    this.autoReset = true,
     super.key,
   });
 
+  /// The [FormController] to provide to descendants.
   final FormController controller;
+
+  /// The widget below this widget in the tree.
   final Widget child;
+
+  /// A callback that is called when the form has errors.
   final ValueChanged<Map<Object, InputFieldError>>? onError;
 
+  /// Whether to automatically reset the form when it is disposed.
+  final bool autoReset;
+
+  /// Returns the [FormController] provided by the nearest ancestor [InputForm].
   static FormController controllerOf(
     BuildContext context,
   ) {
@@ -59,7 +71,7 @@ class _InputFormState extends State<InputForm> {
 
   @override
   void dispose() {
-    _controller.reset();
+    if (widget.autoReset) _controller.reset();
     super.dispose();
   }
 }
