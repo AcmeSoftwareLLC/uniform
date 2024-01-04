@@ -57,7 +57,7 @@ abstract class _FormControllerBase extends ChangeNotifier {
   FieldController<T> call<T extends Object>(Object tag);
 
   /// Gets the [FieldController] bound with the [tag].
-  FieldController<T> getField<T extends Object>(Object tag);
+  FieldController<T>? getField<T extends Object>(Object tag);
 
   /// Returns true if the form states contains any of the [states].
   bool contains(Set<InputFormState> states);

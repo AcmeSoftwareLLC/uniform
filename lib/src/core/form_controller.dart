@@ -17,16 +17,20 @@ class FormController extends _FormControllerBase with Diagnosticable {
   FormController({super.validators, super.debugLabel});
 
   @override
-  FieldController<T> getField<T extends Object>(Object tag) {
-    assert(
-      _fields.containsKey(tag),
-      'Field "$tag" not bound to FormController with tags: ${tags.join(', ')}.',
-    );
-    return _fields[tag]! as FieldController<T>;
+  FieldController<T>? getField<T extends Object>(Object tag) {
+    return _fields[tag] as FieldController<T>?;
   }
 
   @override
-  FieldController<T> call<T extends Object>(Object tag) => getField(tag);
+  FieldController<T> call<T extends Object>(Object tag) {
+    final field = getField<T>(tag);
+
+    assert(
+      field != null,
+      'Field "$tag" not bound to FormController with tags: ${tags.join(', ')}.',
+    );
+    return field!;
+  }
 
   @override
   bool contains(Set<InputFormState> states) {
@@ -35,12 +39,12 @@ class FormController extends _FormControllerBase with Diagnosticable {
 
   @override
   T? getValue<T extends Object>(Object tag) {
-    return getField(tag).value as T?;
+    return getField(tag)?.value as T?;
   }
 
   @override
   bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = (tags ?? _activeTags).map(getField);
+    final fields = (tags ?? _activeTags).map(call);
 
     var isFormValid = true;
     for (final field in fields) {
@@ -109,7 +113,7 @@ class FormController extends _FormControllerBase with Diagnosticable {
     bool notify = true,
   }) {
     for (final entry in initialValues.entries) {
-      getField(entry.key).setInitialValue(entry.value, notify: notify);
+      call(entry.key).setInitialValue(entry.value, notify: notify);
     }
   }
 

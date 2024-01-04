@@ -35,7 +35,7 @@ class _InputFieldBuilderState<T extends Object>
 
   @override
   Widget build(BuildContext context) {
-    final controller = _form.getField<T>(widget.tag);
+    final controller = _form<T>(widget.tag);
 
     return ListenableBuilder(
       listenable: controller,
@@ -53,7 +53,7 @@ class _InputFieldBuilderState<T extends Object>
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(
-      _form.getField<T>(widget.tag).toDiagnosticsNode(),
+      _form<T>(widget.tag).toDiagnosticsNode(),
     );
     super.debugFillProperties(properties);
   }

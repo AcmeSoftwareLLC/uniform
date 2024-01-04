@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.5
+**Jan 4, 2024**
+- Updates `FormController.getField` to be nullable.
+
 ## 2.0.4
 **Nov 24, 2023**
 - Adds `autoReset` flag to **InputForm**.
