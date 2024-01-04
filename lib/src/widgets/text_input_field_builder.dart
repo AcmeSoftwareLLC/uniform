@@ -35,7 +35,7 @@ class _TextInputFieldBuilderState extends State<TextInputFieldBuilder> {
     super.initState();
     _form = InputForm.controllerOf(context)..activate(widget.tag);
 
-    final controller = _form.getField<String>(widget.tag);
+    final controller = _form<String>(widget.tag);
     assert(
       controller is TextFieldController,
       'The controller for tag '
