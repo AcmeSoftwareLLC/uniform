@@ -76,7 +76,7 @@ abstract class _FormControllerBase extends ChangeNotifier {
   /// only the fields with the given [tags] will be validated.
   /// If [notify] is true,
   /// the form will notify its listeners if the form is invalid.
-  bool validate({Set<Object>? tags, bool notify = true});
+  bool validate({Set<Object>? tagsToValidate, bool notify = true});
 
   /// Sets the field bound with the [tag] as active.
   void activate(Object tag);
