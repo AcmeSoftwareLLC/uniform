@@ -43,8 +43,8 @@ class FormController extends _FormControllerBase with Diagnosticable {
   }
 
   @override
-  bool validate({Set<Object>? tags, bool notify = true}) {
-    final fields = (tags ?? _activeTags).map(call);
+  bool validate({Set<Object>? tagsToValidate, bool notify = true}) {
+    final fields = (tagsToValidate ?? tags).map(call);
 
     var isFormValid = true;
     for (final field in fields) {
