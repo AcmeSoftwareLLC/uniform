@@ -30,7 +30,7 @@ class LoginViewModel extends ChangeNotifier {
     )..setValidators(
         {
           const InputFieldValidator.required(),
-          const EmailInputFieldValidator()
+          const EmailInputFieldValidator(),
         },
       );
 
@@ -41,7 +41,7 @@ class LoginViewModel extends ChangeNotifier {
     )..setValidators(
         {
           const InputFieldValidator.required(),
-          const PasswordInputFieldValidator()
+          const PasswordInputFieldValidator(),
         },
       );
 

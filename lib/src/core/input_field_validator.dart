@@ -15,6 +15,7 @@ abstract interface class InputFieldValidator {
   InputFieldError resolve(covariant Object? value);
 }
 
+@immutable
 class _RequiredInputFieldValidator implements InputFieldValidator {
   const _RequiredInputFieldValidator([
     this.message = 'This field is required.',
