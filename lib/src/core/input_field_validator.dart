@@ -30,4 +30,12 @@ class _RequiredInputFieldValidator implements InputFieldValidator {
 
     return InputFieldError.none();
   }
+
+  String get _name => 'RequiredInputFieldValidator';
+
+  @override
+  int get hashCode => _name.hashCode;
+
+  @override
+  bool operator ==(Object other) => other is _RequiredInputFieldValidator;
 }

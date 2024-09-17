@@ -1,4 +1,8 @@
 # Changelog
+## 2.0.6
+**Sep 17, 2024**
+- Adds `FieldController.isRequired`.
+
 ## 2.0.5
 **Jan 4, 2024**
 - Updates `FormController.getField` to be nullable.

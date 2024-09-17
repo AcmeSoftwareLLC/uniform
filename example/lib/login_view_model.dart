@@ -9,6 +9,7 @@ import 'package:uniform_example/validators/email_input_field_validator.dart';
 import 'package:uniform_example/validators/password_input_field_validator.dart';
 
 enum LoginFormTags {
+  name,
   email,
   password,
   selectGender,
@@ -17,20 +18,32 @@ enum LoginFormTags {
 
 class LoginViewModel extends ChangeNotifier {
   LoginViewModel()
-      : formController = FormController(
-          validators: {const InputFieldValidator.required()},
-          debugLabel: 'LoginFormController',
-        ) {
+      : formController = FormController(debugLabel: 'LoginFormController') {
+    _nameField = TextFieldController.create(
+      formController,
+      tag: LoginFormTags.name,
+    );
+
     _emailField = TextFieldController.create(
       formController,
       tag: LoginFormTags.email,
-    )..setValidators({const EmailInputFieldValidator()});
+    )..setValidators(
+        {
+          const InputFieldValidator.required(),
+          const EmailInputFieldValidator()
+        },
+      );
 
     _passwordField = TextFieldController.create(
       formController,
       tag: LoginFormTags.password,
       autoValidate: true,
-    )..setValidators({const PasswordInputFieldValidator()});
+    )..setValidators(
+        {
+          const InputFieldValidator.required(),
+          const PasswordInputFieldValidator()
+        },
+      );
 
     FieldController<bool>.create(
       formController,
@@ -54,6 +67,7 @@ class LoginViewModel extends ChangeNotifier {
 
   final FormController formController;
 
+  late final TextFieldController _nameField;
   late final TextFieldController _emailField;
   late final TextFieldController _passwordField;
   late final FieldController<Gender> _genderField;
@@ -73,6 +87,7 @@ class LoginViewModel extends ChangeNotifier {
       await Future<void>.delayed(const Duration(seconds: 2));
 
       _userData = {
+        'Full Name': _nameField.value,
         'Email Address': _emailField.value,
         'Password': _passwordField.value,
         'Gender': _genderField.value?.name,

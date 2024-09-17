@@ -38,12 +38,20 @@ class _LoginPageState extends State<LoginPage> {
             children: [
               const TextInputField(
                 tag: LoginFormTags.email,
-                hintText: 'Email',
+                labelText: 'Email Address',
+                hintText: 'Enter your email address',
+              ),
+              const SizedBox(height: 16),
+              const TextInputField(
+                tag: LoginFormTags.name,
+                labelText: 'Full Name',
+                hintText: 'Enter your full name',
               ),
               const SizedBox(height: 16),
               const TextInputField(
                 tag: LoginFormTags.password,
-                hintText: 'Password',
+                labelText: 'Password',
+                hintText: 'Enter your password',
                 obscureText: true,
               ),
               const SizedBox(height: 16),

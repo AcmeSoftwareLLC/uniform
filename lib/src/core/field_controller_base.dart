@@ -33,6 +33,10 @@ abstract class _FieldControllerBase<T extends Object> extends ChangeNotifier {
 
   T? get value => _value;
 
+  bool get isRequired {
+    return _validators.contains(const _RequiredInputFieldValidator());
+  }
+
   /// The current error of this field.
   InputFieldError get error => _error;
 
