@@ -109,18 +109,18 @@ abstract class _FieldControllerBase<T extends Object> extends ChangeNotifier {
       assert(
         () {
           log(
-            'Tried to request focus on a field which is not attached to the scope. '
+            'Tried to request focus on an unattached field. '
             'Consider adding `controller.focusNode` to the field widget.\n'
-            '┌────────────────────────────────────────────────────────────────┐\n'
-            '│ TextInputFieldBuilder(                                         │\n'
-            '│   builder: (context, controller, textEditingController) {      │\n'
-            '│     return TextFormField(                                      │\n'
-            '│       focusNode: controller.focusNode,     // Add this line    │\n'
-            '│       ...                                                      │\n'
-            '│     );                                                         │\n'
-            '│   }                                                            │\n'
-            '│);                                                              │\n'
-            '└────────────────────────────────────────────────────────────────┘',
+            '┌──────────────────────────────────────────────────────────────┐\n'
+            '│ TextInputFieldBuilder(                                       │\n'
+            '│   builder: (context, controller, textEditingController) {    │\n'
+            '│     return TextFormField(                                    │\n'
+            '│       focusNode: controller.focusNode,    // Add this line   │\n'
+            '│       ...                                                    │\n'
+            '│     );                                                       │\n'
+            '│   }                                                          │\n'
+            '│);                                                            │\n'
+            '└──────────────────────────────────────────────────────────────┘',
             name: '$runtimeType($tag)',
           );
           return true;
