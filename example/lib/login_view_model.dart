@@ -22,7 +22,11 @@ class LoginViewModel extends ChangeNotifier {
     _nameField = TextFieldController.create(
       formController,
       tag: LoginFormTags.name,
-    );
+    )..setValidators(
+        {
+          const InputFieldValidator.required(),
+        },
+      );
 
     _emailField = TextFieldController.create(
       formController,

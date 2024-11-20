@@ -25,6 +25,7 @@ class TextInputField extends StatelessWidget {
       tag: tag,
       builder: (context, controller, textEditingController) {
         return TextFormField(
+          focusNode: controller.focusNode,
           controller: textEditingController,
           decoration: InputDecoration(
             label: Text(controller.isRequired ? '$labelText *' : labelText),
