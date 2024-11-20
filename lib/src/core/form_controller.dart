@@ -46,13 +46,17 @@ class FormController extends _FormControllerBase with Diagnosticable {
   }
 
   @override
-  bool validate({Set<Object>? tags, bool notify = true}) {
+  bool validate({
+    Set<Object>? tags,
+    bool notify = true,
+    bool focusOnError = true,
+  }) {
     final fields = (tags ?? _activeTags).map(call);
 
     var isFormValid = true;
     for (final field in fields) {
       if (!field.validate(notify: notify)) {
-        if (isFormValid) field.requestFocus();
+        if (focusOnError && isFormValid) field.requestFocus();
         isFormValid = false;
       }
     }
