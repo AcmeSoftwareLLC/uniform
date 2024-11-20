@@ -28,6 +28,7 @@ class DropdownInputField<T extends Object> extends StatelessWidget {
       tag: tag,
       builder: (context, controller, _) {
         return DropdownMenu(
+          focusNode: controller.focusNode,
           width: width,
           requestFocusOnTap: false,
           enabled: !controller.isSubmitted,

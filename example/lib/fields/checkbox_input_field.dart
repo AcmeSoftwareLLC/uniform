@@ -21,11 +21,13 @@ class CheckboxInputField extends StatelessWidget {
       tag: tag,
       builder: (context, controller, _) {
         return CheckboxListTile(
+          focusNode: controller.focusNode,
           value: controller.value,
           enabled: !controller.isSubmitted,
           onChanged: controller.onChanged,
           controlAffinity: ListTileControlAffinity.leading,
           title: Text(label),
+          isError: controller.error.message != null,
         );
       },
     );

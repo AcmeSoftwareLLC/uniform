@@ -2,7 +2,10 @@
 // Use of this source code is governed by a BSD-style license that can be
 // found in the LICENSE file.
 
+import 'dart:developer';
+
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:uniform/src/core/input_form_state.dart';
 
 part 'field_controller.dart';
@@ -48,7 +51,10 @@ class FormController extends _FormControllerBase with Diagnosticable {
 
     var isFormValid = true;
     for (final field in fields) {
-      if (!field.validate(notify: notify)) isFormValid = false;
+      if (!field.validate(notify: notify)) {
+        if (isFormValid) field.requestFocus();
+        isFormValid = false;
+      }
     }
 
     _setValidity(isValid: isFormValid);
